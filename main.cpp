@@ -28,7 +28,42 @@ extern int max_height_divisor;
 
 const double PI = 3.141592653589793238463;
 
+void TitleScreen()
+{
+	erase();
+	while (getch() == ERR)
+	{
+		stringstream ss;
+		int mx = LINES;
+		int my = COLS;
 
+
+		refresh();
+
+		//will center TANKS vertically
+		int numOfEndls = (LINES - 22) / 2;
+		//askii art title screen
+
+		for (int i = 0; i < numOfEndls; i++)
+		{
+			ss << endl;
+		}
+		ss << '\t' << "TTTTTTTTTTTTTTT   AAAAAAAAAAA   NNNNNNN    NNNNN  KKKKK   KKKKK  SSSSSSSSSS" << endl;
+		ss << '\t' << "TTTTTTTTTTTTTTT  AAAAAAAAAAAAA  NNNNNNNN   NNNNN  KKKKK  KKKKK  SSSSSSSSSSSS" << endl;
+		ss << '\t' << "TTTTTTTTTTTTTTT  AAAAA   AAAAA  NNNNNNNNN  NNNNN  KKKKK KKKKK   SSSSS  SSSSS" << endl;
+		ss << '\t' << "     TTTTT       AAAAA   AAAAA  NNNNNNNNNN NNNNN  KKKKKKKKKK     SSSSSSS  " << endl;
+		ss << '\t' << "     TTTTT       AAAAAAAAAAAAA  NNNNN NNNNNNNNNN  KKKKKKKKKK        SSSSSSSS " << endl;
+		ss << '\t' << "     TTTTT       AAAAAAAAAAAAA  NNNNN  NNNNNNNNN  KKKKK KKKKK   SSSSS  SSSSS" << endl;
+		ss << '\t' << "     TTTTT       AAAAA   AAAAA  NNNNN   NNNNNNNN  KKKKK  KKKKK  SSSSSSSSSSSS" << endl;
+		ss << '\t' << "     TTTTT       AAAAA   AAAAA  NNNNN    NNNNNNN  KKKKK   KKKKK  SSSSSSSSSS" << endl;
+		ss << '\t' << "------------------------------------------------------------------------------" << endl;
+		ss << '\t' << " PRESS ENTER TO START" << endl;
+		//waste_time();
+
+		addstr(ss.str().c_str());
+		refresh();
+	}
+}
 
 void MySleep(int milliseconds)
 {
@@ -50,9 +85,18 @@ void DrawScreen(Ground & g, Player * players, int turn)
 	refresh();
 }
 
+//pN is v
+void Hit(Vec2D &v, Player *players, int turn)
+{
+	move ((int)v.y, (int)v.x);
+	addch('X');
+	refresh();
+	MySleep(1000);
+}
+
 //http://www.iforce2d.net/b2dtut/projected-trajectory
 
-void Shoot(Ground & g, Player * players, int turn)
+void Shoot(Ground & g, Player * players, int turn, bool &keep_going)
 {
 	double angle = players[turn].angle / 180.0 * PI;
     double time_divisor = 15.0;
@@ -74,13 +118,21 @@ void Shoot(Ground & g, Player * players, int turn)
             MySleep(20);
             continue;
         }
-        if (pN.y > g.ground.at((int)pN.x))
-            break;
+		if (pN.y >= g.ground.at((int)pN.x))
+		{
+			Hit(pN, players, turn);
+			MySleep(100);
+			break;
+		}
         
         move((int)pN.y - 1, (int)pN.x + 1);
         addch('*'); instead:
         refresh();
         MySleep(20);
+		if (players[turn].hit)
+		{
+			keep_going = false;
+		}
     }
     
     /*
@@ -137,6 +189,12 @@ int main(int argc, char * argv[])
 	noecho();
 	keypad(stdscr, 1);
 
+	TitleScreen();
+	while (getch() != 'G')
+	{
+		continue;
+	}
+
 	g.InitializeGround();
 	players[0].Initialize(rand() % (COLS / 4), LEFT);
 	players[1].Initialize(rand() % (COLS / 4) + 3 * COLS / 4 - 2, RIGHT);
@@ -173,7 +231,7 @@ int main(int argc, char * argv[])
 #if defined(WIN32)
 		case PADENTER:
 #endif
-			Shoot(g, players, turn);
+			Shoot(g, players, turn, keep_going);
 			turn = 1 - turn;
 			break;
 
@@ -189,8 +247,11 @@ int main(int argc, char * argv[])
 			addstr(ss.str().c_str());
 			refresh();
 		}
+		//checks if player turn.hit = true
+		// if so, break
 	}
 	erase();
+	// add winner screen
 	addstr("Hit any key to exit");
 	refresh();
 	getch();

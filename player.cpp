@@ -23,6 +23,10 @@ Player::Player()
 	col = 0;
 	angle = 60.0;
 	power = 30.0;
+	hit = false;
+	// bool hit <- will be at end of shoot function.
+	// checks after each function whether it hit player
+	// if yes, trigger winner screen.
 }
 
 void Player::Initialize(int column, Side side)
@@ -39,6 +43,8 @@ void Player::Draw(Ground & g)
 void Player::PowerUp()
 {
 	power += power_increment;
+	if (power >= 100)
+		power = 100;
 }
 
 void Player::PowerDown()
