@@ -96,7 +96,37 @@ void Hit(Vec2D &v, Player *players, int turn)
 
 //http://www.iforce2d.net/b2dtut/projected-trajectory
 
+<<<<<<< HEAD
 void Shoot(Ground & g, Player * players, int turn, bool &keep_going)
+=======
+void DrawHit(Vec2D &v)
+{
+
+    move(v.y-1, v.x-1);
+    addch('X');
+    move(v.y, v.x-1);
+    addch('X');
+    move(v.y+1, v.x-1);
+    addch('X');
+    move(v.y-1, v.x);
+    addch('X');
+    move(v.y, v.x);
+    addch('X');
+    move(v.y+1, v.x);
+    addch('X');
+    move(v.y-1, v.x+1);
+    addch('X');
+    move(v.y, v.x+1);
+    addch('X');
+    move(v.y+1, v.x+1);
+    addch('X');
+    
+    refresh();
+    MySleep(1000);
+}
+
+void Shoot(Ground & g, Player * players, int turn)
+>>>>>>> origin/master
 {
 	double angle = players[turn].angle / 180.0 * PI;
     double time_divisor = 15.0;
@@ -118,12 +148,22 @@ void Shoot(Ground & g, Player * players, int turn, bool &keep_going)
             MySleep(20);
             continue;
         }
+<<<<<<< HEAD
 		if (pN.y >= g.ground.at((int)pN.x))
 		{
 			Hit(pN, players, turn);
 			MySleep(100);
 			break;
 		}
+=======
+        if (pN.y >= g.ground.at((int)pN.x))
+        {
+            DrawHit(pN);
+            MySleep(100);
+            break;
+        }
+        
+>>>>>>> origin/master
         
         move((int)pN.y - 1, (int)pN.x + 1);
         addch('*'); instead:
