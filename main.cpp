@@ -14,6 +14,7 @@
 #include <curses.h>
 #include <cstdlib>
 #include <unistd.h>
+#include "Vec2D.hpp"
 #endif
 
 #include "ground.hpp"
