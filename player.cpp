@@ -39,6 +39,8 @@ void Player::Draw(Ground & g)
 void Player::PowerUp()
 {
 	power += power_increment;
+    if (power >= 100)
+        power = 100;
 }
 
 void Player::PowerDown()
