@@ -21,8 +21,8 @@ Player::Player()
 {
 	s = LEFT;
 	col = 0;
-	angle = 45.0;
-	power = 50.0;
+	angle = 60.0;
+	power = 30.0;
 }
 
 void Player::Initialize(int column, Side side)

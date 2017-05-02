@@ -16,6 +16,7 @@
 
 #include "ground.hpp"
 #include "player.hpp"
+#include "Vec2D.hpp"
 
 using namespace std;
 
@@ -23,6 +24,8 @@ extern int base_height_divisor;
 extern int max_height_divisor;
 
 const double PI = 3.141592653589793238463;
+
+
 
 void MySleep(int milliseconds)
 {
@@ -49,8 +52,38 @@ void DrawScreen(Ground & g, Player * players, int turn)
 void Shoot(Ground & g, Player * players, int turn)
 {
 	double angle = players[turn].angle / 180.0 * PI;
-	double y_component = sin(angle) * players[turn].power * 0.2;
-	double x_component = cos(angle) * players[turn].power * 0.2;
+    double time_divisor = 15.0;
+    Vec2D force(sin(angle) * players[turn].power * 0.2, cos(angle) * players[turn].power * 0.2);
+    if (players[turn].s == RIGHT)
+        force.x = -force.x;
+    Vec2D gravity(0.0, -0.98);
+    Vec2D p0(players[turn].col,LINES - g.ground.at(players[turn].col));
+    
+    for (int i = 1; i < 50000; i++)
+    {
+        double di = i / time_divisor;
+        Vec2D pN = p0 + force * di + gravity * (di * di + di) * 0.5;
+        pN.y = LINES - pN.y;
+           
+        if (pN.x < 1 || pN.x >= COLS - 2)
+            break;
+        if (pN.y < 1) {
+            MySleep(20);
+            continue;
+        }
+        if (pN.y > g.ground.at((int)pN.x))
+            break;
+        
+        move((int)pN.y - 1, (int)pN.x + 1);
+        addch('*'); instead:
+        refresh();
+        MySleep(20);
+    }
+    
+    /*
+    double angle = players[turn].angle / 180.0 * PI;
+	double y_component = sin(angle) * players[turn].power * 0.2; //1st component of force
+	double x_component = cos(angle) * players[turn].power * 0.2;//2nd component of force
 	
 	double pNx;
 	double pNy;
@@ -60,20 +93,20 @@ void Shoot(Ground & g, Player * players, int turn)
 		x_component = -x_component;
 
 	double p0x = players[turn].col;
-	double p0y = g.ground.at(players[turn].col);
+	double p0y = g.ground.at(players[turn].col);//shouldn't it be LINES - g.ground.at(players[turn].col); ??
 	// higher ground numbers are lower altitudes (0 is first line, etc).
 	p0y = LINES - p0y;
-	for (int i = 1; i < 5000; i++)
+	for (int i = 1; i < 50000; i++)
 	{
 		double di = i / time_divisor;
 
 		pNx = (int)(p0x + di * x_component);
-		pNy = p0y + di * y_component + (di * di + di) * -9.8 / time_divisor / 1.5;
+        pNy = p0y + di * y_component + (di * di + di) * -9.8 / time_divisor / 1.5;
 		pNy = (int)(LINES - pNy);
 		if (pNx < 1 || pNx >= COLS - 2)
 			break;
 		if (pNy < 1) {
-			MySleep(50);
+			MySleep(20);
 			continue;
 		}
 	//	if (pNy >= LINES - 2)
@@ -82,10 +115,10 @@ void Shoot(Ground & g, Player * players, int turn)
 			break;
 
 		move((int)pNy - 1, (int)pNx + 1);
-		addch('*');
 		refresh();
-		MySleep(50);
+		MySleep(20);
 	}
+    */
 }
 
 int main(int argc, char * argv[])

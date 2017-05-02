@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6A252CC21EB8A3AC00ED0844 /* Vec2D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6A252CC01EB8A3AC00ED0844 /* Vec2D.cpp */; };
 		C0472D4A1EB2AEB00045A747 /* ground.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C0472D451EB2AEB00045A747 /* ground.cpp */; };
 		C0472D4B1EB2AEB00045A747 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C0472D471EB2AEB00045A747 /* main.cpp */; };
 		C0472D4C1EB2AEB00045A747 /* player.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C0472D481EB2AEB00045A747 /* player.cpp */; };
@@ -28,6 +29,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		6A252CC01EB8A3AC00ED0844 /* Vec2D.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Vec2D.cpp; sourceTree = "<group>"; };
+		6A252CC11EB8A3AC00ED0844 /* Vec2D.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Vec2D.hpp; sourceTree = "<group>"; };
 		C0472D3A1EB2AE3A0045A747 /* curses-tanks-m */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "curses-tanks-m"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C0472D451EB2AEB00045A747 /* ground.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ground.cpp; path = ../../ground.cpp; sourceTree = "<group>"; };
 		C0472D461EB2AEB00045A747 /* ground.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = ground.hpp; path = ../../ground.hpp; sourceTree = "<group>"; };
@@ -74,6 +77,8 @@
 				C0472D471EB2AEB00045A747 /* main.cpp */,
 				C0472D481EB2AEB00045A747 /* player.cpp */,
 				C0472D491EB2AEB00045A747 /* player.hpp */,
+				6A252CC01EB8A3AC00ED0844 /* Vec2D.cpp */,
+				6A252CC11EB8A3AC00ED0844 /* Vec2D.hpp */,
 			);
 			path = "curses-tanks-m";
 			sourceTree = "<group>";
@@ -145,6 +150,7 @@
 			files = (
 				C0472D4B1EB2AEB00045A747 /* main.cpp in Sources */,
 				C0472D4A1EB2AEB00045A747 /* ground.cpp in Sources */,
+				6A252CC21EB8A3AC00ED0844 /* Vec2D.cpp in Sources */,
 				C0472D4C1EB2AEB00045A747 /* player.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -242,6 +248,7 @@
 		C0472D421EB2AE3A0045A747 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -249,6 +256,7 @@
 		C0472D431EB2AE3A0045A747 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
@@ -272,6 +280,7 @@
 				C0472D431EB2AE3A0045A747 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
