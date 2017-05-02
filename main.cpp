@@ -53,7 +53,7 @@ void Shoot(Ground & g, Player * players, int turn)
 {
 	double angle = players[turn].angle / 180.0 * PI;
     double time_divisor = 15.0;
-    Vec2D force(sin(angle) * players[turn].power * 0.2, cos(angle) * players[turn].power * 0.2);
+	Vec2D force(sin(angle) * players[turn].power * 0.2, cos(angle) * players[turn].power * 0.2);
     if (players[turn].s == RIGHT)
         force.x = -force.x;
     Vec2D gravity(0.0, -0.98);
@@ -149,19 +149,19 @@ int main(int argc, char * argv[])
 			keep_going = false;
 			break;
 
-		case '<':
+		case 's':
 			players[turn].PowerDown();
 			break;
 
-		case '>':
+		case 'w':
 			players[turn].PowerUp();
 			break;
 
-		case 'u':
+		case 'e':
 			players[turn].AngleUp();
 			break;
 
-		case 'd':
+		case 'c':
 			players[turn].AngleDown();
 			break;
 
