@@ -43,13 +43,8 @@ void Player::Draw(Ground & g)
 void Player::PowerUp()
 {
 	power += power_increment;
-<<<<<<< HEAD
-	if (power >= 100)
-		power = 100;
-=======
     if (power >= 100)
-        power = 100;
->>>>>>> origin/master
+		power = 100;
 }
 
 void Player::PowerDown()

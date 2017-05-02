@@ -88,46 +88,32 @@ void DrawScreen(Ground & g, Player * players, int turn)
 //pN is v
 void Hit(Vec2D &v, Player *players, int turn)
 {
-	move ((int)v.y, (int)v.x);
-	addch('X');
-	refresh();
+    vector<Vec2D> hits;
+    Vec2D h;
+    
+    for (int i=-1;i<2;i++)
+    {
+        for(int j=-1;j<2;j++)
+        {
+            h.y = v.y + j;
+            h.x = v.x + i;
+            hits.push_back(h);
+        }
+    }
+    
+    for (size_t i = 0; i<hits.size(); i++)
+    {
+        move(hits.at(i).y, hits.at(i).x);
+        addch('X');
+    }
+    
+    refresh();
 	MySleep(1000);
 }
 
 //http://www.iforce2d.net/b2dtut/projected-trajectory
 
-<<<<<<< HEAD
-void Shoot(Ground & g, Player * players, int turn, bool &keep_going)
-=======
-void DrawHit(Vec2D &v)
-{
-
-    move(v.y-1, v.x-1);
-    addch('X');
-    move(v.y, v.x-1);
-    addch('X');
-    move(v.y+1, v.x-1);
-    addch('X');
-    move(v.y-1, v.x);
-    addch('X');
-    move(v.y, v.x);
-    addch('X');
-    move(v.y+1, v.x);
-    addch('X');
-    move(v.y-1, v.x+1);
-    addch('X');
-    move(v.y, v.x+1);
-    addch('X');
-    move(v.y+1, v.x+1);
-    addch('X');
-    
-    refresh();
-    MySleep(1000);
-}
-
-void Shoot(Ground & g, Player * players, int turn)
->>>>>>> origin/master
-{
+void Shoot(Ground & g, Player * players, int turn, bool &keep_going){
 	double angle = players[turn].angle / 180.0 * PI;
     double time_divisor = 15.0;
 	Vec2D force(sin(angle) * players[turn].power * 0.2, cos(angle) * players[turn].power * 0.2);
@@ -148,22 +134,12 @@ void Shoot(Ground & g, Player * players, int turn)
             MySleep(20);
             continue;
         }
-<<<<<<< HEAD
 		if (pN.y >= g.ground.at((int)pN.x))
 		{
 			Hit(pN, players, turn);
 			MySleep(100);
 			break;
 		}
-=======
-        if (pN.y >= g.ground.at((int)pN.x))
-        {
-            DrawHit(pN);
-            MySleep(100);
-            break;
-        }
-        
->>>>>>> origin/master
         
         move((int)pN.y - 1, (int)pN.x + 1);
         addch('*'); instead:
@@ -229,11 +205,13 @@ int main(int argc, char * argv[])
 	noecho();
 	keypad(stdscr, 1);
 
-	TitleScreen();
+	/*
+    TitleScreen();
 	while (getch() != 'G')
 	{
 		continue;
 	}
+     */
 
 	g.InitializeGround();
 	players[0].Initialize(rand() % (COLS / 4), LEFT);
