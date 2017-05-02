@@ -8,6 +8,8 @@
 #if defined(WIN32)
 #include <Windows.h>
 #include "curses.h"
+#include "curses-tanks-m\curses-tanks-m\Vec2D.hpp"
+
 #else
 #include <curses.h>
 #include <cstdlib>
@@ -16,7 +18,7 @@
 
 #include "ground.hpp"
 #include "player.hpp"
-#include "Vec2D.hpp"
+
 
 using namespace std;
 
