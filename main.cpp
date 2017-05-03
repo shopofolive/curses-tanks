@@ -28,6 +28,15 @@ extern int max_height_divisor;
 
 const double PI = 3.141592653589793238463;
 
+void PrintMessage(int l, int c, string s, char = 32)
+{
+    move(l, c);
+    stringstream ss;
+    ss << setw(int(s.length())) << s << " ";
+    addstr(ss.str().c_str());
+    refresh();
+}
+
 void TitleScreen()
 {
 	erase();
@@ -85,12 +94,15 @@ void DrawScreen(Ground & g, Player * players, int turn)
 	refresh();
 }
 
-//pN is v
-void Hit(Vec2D &v, Player *players, int turn)
+//v = pN
+void Hit(Vec2D &v, Player * players, int turn, Ground &g)
 {
+    //all nine hit coordinates will be pushed here:
     vector<Vec2D> hits;
+    //a containter variable that will take the coordinates of each hit and be pushed into the vector:
     Vec2D h;
     
+    //define the vector:
     for (int i=-1;i<2;i++)
     {
         for(int j=-1;j<2;j++)
@@ -103,12 +115,48 @@ void Hit(Vec2D &v, Player *players, int turn)
     
     for (size_t i = 0; i<hits.size(); i++)
     {
-        move(hits.at(i).y, hits.at(i).x);
-        addch('X');
+        int line = hits.at(i).y;
+        int col = hits.at(i).x;
+        move(line, col);
+        if ((line == g.ground.at(col)) || (line + 1 == g.ground.at(col)))
+        {
+            refresh();
+            addch('X');
+        }
+        
+        //form a crater:
+        if (line == g.ground.at(col))
+            g.ground.at(col) = g.ground.at(col) + 1;
+        
+        //adjust to make sure the ground does not encroach on the border:
+        if (g.ground.at(col) > LINES - 2)
+            g.ground.at(col) = LINES - 2;
+        
+        //check if enemy tank is hit:
+        if ((line == g.ground.at(players[1 - turn].col) - 1) && (col == players[1 - turn].col + 1))
+        {
+            //tank is hit!!!
+            players[1 - turn].hit = true;
+        }
+        
+        /*
+        //for debugging purposes: print out a table showing the position of each hit and the position of enemy tank:
+        move(int(i), 1);
+        stringstream ss;
+        ss << setw(4) << line << " " << col;
+        addstr(ss.str().c_str());
+        refresh();
+        
+        move(int(i), 20);
+        ss = stringstream();
+        ss << setw(4) << g.ground.at(players[1-turn].col) - 1 << " " << players[1-turn].col + 1 << " " << players[1 - turn].hit;
+        addstr(ss.str().c_str());
+        refresh();
+         */
     }
     
     refresh();
-	MySleep(1000);
+	MySleep(500);
 }
 
 //http://www.iforce2d.net/b2dtut/projected-trajectory
@@ -136,7 +184,7 @@ void Shoot(Ground & g, Player * players, int turn, bool &keep_going){
         }
 		if (pN.y >= g.ground.at((int)pN.x))
 		{
-			Hit(pN, players, turn);
+			Hit(pN, players, turn, g);
 			MySleep(100);
 			break;
 		}
@@ -145,7 +193,7 @@ void Shoot(Ground & g, Player * players, int turn, bool &keep_going){
         addch('*'); instead:
         refresh();
         MySleep(20);
-		if (players[turn].hit)
+		if ((players[1 - turn].hit) || (players[turn].hit))
 		{
 			keep_going = false;
 		}
@@ -204,6 +252,7 @@ int main(int argc, char * argv[])
 	initscr();
 	noecho();
 	keypad(stdscr, 1);
+    curs_set(0);
 
 	/*
     TitleScreen();
@@ -214,13 +263,14 @@ int main(int argc, char * argv[])
      */
 
 	g.InitializeGround();
-	players[0].Initialize(rand() % (COLS / 4), LEFT);
-	players[1].Initialize(rand() % (COLS / 4) + 3 * COLS / 4 - 2, RIGHT);
+    //we have to make sure the tank is positioned not too close to either border, otherwise Shoot() will result in errors:
+	players[0].Initialize(rand() % (COLS / 4) + 5, LEFT);
+	players[1].Initialize(rand() % (COLS / 4) + 3 * COLS / 4 - 5, RIGHT);
 
 	DrawScreen(g, players, turn);
 	while (keep_going)
 	{
-		bool show_char = false;
+        bool show_char = false;
 		int c = getch();
 		switch (c)
 		{
@@ -257,22 +307,24 @@ int main(int argc, char * argv[])
 			show_char = true;
 			break;
 		}
-		DrawScreen(g, players, turn);
-		if (show_char) {
-			move(0, 1);
-			stringstream ss;
-			ss << setw(4) << c << " ";
-			addstr(ss.str().c_str());
-			refresh();
-		}
-		//checks if player turn.hit = true
-		// if so, break
-	}
+        
+        if (!players[turn].hit)
+        {
+            DrawScreen(g, players, turn);
+            /*if (show_char) { PrintMessage(0, 1, " ", c);}*/
+        }
+        else
+        {
+            break;
+        }
+    }
 	erase();
 	// add winner screen
-	addstr("Hit any key to exit");
+	/*
+    addstr("Hit any key to exit");
 	refresh();
 	getch();
+     */
 	echo();
 	endwin();
 	return 0;
