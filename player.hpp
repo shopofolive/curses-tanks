@@ -23,6 +23,7 @@ public:
 	double power;
 	double angle;
 	bool hit;
+    int score;
 	Side s;
 
 	static const int power_increment;

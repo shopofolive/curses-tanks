@@ -24,6 +24,7 @@ Player::Player()
 	angle = 60.0;
 	power = 30.0;
 	hit = false;
+    score = 0;
 	// bool hit <- will be at end of shoot function.
 	// checks after each function whether it hit player
 	// if yes, trigger winner screen.
@@ -33,6 +34,7 @@ void Player::Initialize(int column, Side side)
 {
 	col = column;
 	s = side;
+    hit = false;
 }
 
 void Player::Draw(Ground & g)
@@ -94,4 +96,8 @@ void Player::DrawSettings(int turn)
 	ss = stringstream();
 	ss << setw(10) << left << "Power: " << setw(6) << power;
 	mvaddstr(line++, starting_column, ss.str().c_str());
+    
+    ss = stringstream();
+    ss << setw(10) << left << "Score: " << setw(6) << score;
+    mvaddstr(line++, starting_column, ss.str().c_str());
 }

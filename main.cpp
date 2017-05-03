@@ -198,46 +198,16 @@ void Shoot(Ground & g, Player * players, int turn, bool &keep_going){
 			keep_going = false;
 		}
     }
-    
-    /*
-    double angle = players[turn].angle / 180.0 * PI;
-	double y_component = sin(angle) * players[turn].power * 0.2; //1st component of force
-	double x_component = cos(angle) * players[turn].power * 0.2;//2nd component of force
-	
-	double pNx;
-	double pNy;
-	double time_divisor = 15.0;
-	
-	if (players[turn].s == RIGHT)
-		x_component = -x_component;
+}
 
-	double p0x = players[turn].col;
-	double p0y = g.ground.at(players[turn].col);//shouldn't it be LINES - g.ground.at(players[turn].col); ??
-	// higher ground numbers are lower altitudes (0 is first line, etc).
-	p0y = LINES - p0y;
-	for (int i = 1; i < 50000; i++)
-	{
-		double di = i / time_divisor;
-
-		pNx = (int)(p0x + di * x_component);
-        pNy = p0y + di * y_component + (di * di + di) * -9.8 / time_divisor / 1.5;
-		pNy = (int)(LINES - pNy);
-		if (pNx < 1 || pNx >= COLS - 2)
-			break;
-		if (pNy < 1) {
-			MySleep(20);
-			continue;
-		}
-	//	if (pNy >= LINES - 2)
-	//		break;
-		if (pNy > g.ground.at((int)pNx))
-			break;
-
-		move((int)pNy - 1, (int)pNx + 1);
-		refresh();
-		MySleep(20);
-	}
-    */
+void InitializeGame(Ground &g, Player *players)
+{
+    int turn = 0;
+    g.InitializeGround();
+    //make sure the tank is positioned not too close to either border, otherwise Shoot() will result in errors:
+    players[0].Initialize(rand() % (COLS / 4) + 5, LEFT);
+    players[1].Initialize(rand() % (COLS / 4) + 3 * COLS / 4 - 5, RIGHT);
+    DrawScreen(g, players, turn);
 }
 
 int main(int argc, char * argv[])
@@ -262,12 +232,8 @@ int main(int argc, char * argv[])
 	}
      */
 
-	g.InitializeGround();
-    //we have to make sure the tank is positioned not too close to either border, otherwise Shoot() will result in errors:
-	players[0].Initialize(rand() % (COLS / 4) + 5, LEFT);
-	players[1].Initialize(rand() % (COLS / 4) + 3 * COLS / 4 - 5, RIGHT);
-
-	DrawScreen(g, players, turn);
+    InitializeGame(g, players);
+    
 	while (keep_going)
 	{
         bool show_char = false;
@@ -315,16 +281,22 @@ int main(int argc, char * argv[])
         }
         else
         {
-            break;
+            players[1 - turn].score++;
+            if (players[1 - turn].score < 3)
+            {
+                //erase current ground and players data and re-initialize game:
+                g.ground.clear();
+                InitializeGame(g, players);
+                keep_going = true;
+            }
+            else
+            {
+                break;
+            }
         }
     }
+    //TODO: insert winner screen function here
 	erase();
-	// add winner screen
-	/*
-    addstr("Hit any key to exit");
-	refresh();
-	getch();
-     */
 	echo();
 	endwin();
 	return 0;
