@@ -115,28 +115,31 @@ void Hit(Vec2D &v, Player * players, int turn, Ground &g)
     
     for (size_t i = 0; i<hits.size(); i++)
     {
-        int line = hits.at(i).y;
-        int col = hits.at(i).x;
-        move(line, col);
-        if ((line == g.ground.at(col)) || (line + 1 == g.ground.at(col)))
+        int hit_line = hits.at(i).y;
+        int hit_col = hits.at(i).x;
+        move(hit_line, hit_col);
+        if ((hit_line == g.ground.at(hit_col)) || (hit_line + 1 == g.ground.at(hit_col)))
         {
             refresh();
             addch('X');
         }
         
         //form a crater:
-        if (line == g.ground.at(col))
-            g.ground.at(col) = g.ground.at(col) + 1;
+        if (hit_line == g.ground.at(hit_col))
+            g.ground.at(hit_col - 1) = g.ground.at(hit_col - 1) + 1;
         
         //adjust to make sure the ground does not encroach on the border:
-        if (g.ground.at(col) > LINES - 2)
-            g.ground.at(col) = LINES - 2;
+        if (g.ground.at(hit_col - 1) > LINES - 2)
+            g.ground.at(hit_col - 1) = LINES - 2;
         
-        //check if enemy tank is hit:
-        if ((line == g.ground.at(players[1 - turn].col) - 1) && (col == players[1 - turn].col + 1))
+        //check if tanks are hit:
+        for (int i=0;i<2;i++)
         {
-            //tank is hit!!!
-            players[1 - turn].hit = true;
+            if ((hit_line == g.ground.at(players[i].col) - 1) && (hit_col == players[i].col + 1))
+            {
+                //tank is hit!!!
+                players[i].hit = true;
+            }
         }
         
         /*
@@ -163,12 +166,17 @@ void Hit(Vec2D &v, Player * players, int turn, Ground &g)
 
 void Shoot(Ground & g, Player * players, int turn, bool &keep_going){
 	double angle = players[turn].angle / 180.0 * PI;
-    double time_divisor = 15.0;
+    double time_divisor = 5.0;
 	Vec2D force(sin(angle) * players[turn].power * 0.2, cos(angle) * players[turn].power * 0.2);
     if (players[turn].s == RIGHT)
         force.x = -force.x;
     Vec2D gravity(0.0, -0.98);
-    Vec2D p0(players[turn].col,LINES - g.ground.at(players[turn].col));
+    //the starting point is above the actual position of the tank, to prevent self-injury in the first moments of the shot;
+    int p_col = players[turn].col;
+    int p_line = LINES - g.ground.at(players[turn].col);
+    if (turn == 0)
+        p_col++;
+    Vec2D p0(p_col,p_line);
     
     for (int i = 1; i < 50000; i++)
     {
@@ -185,7 +193,7 @@ void Shoot(Ground & g, Player * players, int turn, bool &keep_going){
 		if (pN.y >= g.ground.at((int)pN.x))
 		{
 			Hit(pN, players, turn, g);
-			MySleep(100);
+			MySleep(20);
 			break;
 		}
         

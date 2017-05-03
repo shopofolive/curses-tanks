@@ -35,6 +35,12 @@ void Ground::InitializeGround()
 void Ground::Draw()
 {
 	for (size_t i = 0; i < ground.size(); i++) {
-		mvaddch(ground.at(i), i + 1, '-');
+		mvaddch(ground.at(i), i + 1, ACS_CKBOARD);
+        //for (int dif = LINES - ground.at(i);dif<LINES;dif++)
+        for (int j = 0; j < LINES - ground.at(i) - 1; j++)
+        {
+            move(ground.at(i) + j, int(i + 1));
+            addch(ACS_CKBOARD);
+        }
 	}
 }
