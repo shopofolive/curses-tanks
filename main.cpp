@@ -53,8 +53,6 @@ void TitleScreen()
 	while (true)
 	{
 		stringstream ss;
-		int mx = LINES;
-		int my = COLS;
 
 
 		refresh();
@@ -79,8 +77,7 @@ void TitleScreen()
 		ss << '\t' << " PRESS D TO START" << endl;
 
 		//waste_time();d
-
-		addstr(ss.str().c_str());
+        addstr(ss.str().c_str());
 		refresh();
 	}
 }
@@ -91,8 +88,6 @@ void InstructionScreen()
 		while (true)
 		{
 			stringstream ss;
-			int mx = LINES;
-			int my = COLS;
 
 
 			refresh();
@@ -129,7 +124,7 @@ void InstructionScreen()
 			
 
 			//waste_time();d
-
+            
 			addstr(ss.str().c_str());
 			refresh();
 	}
@@ -138,85 +133,70 @@ void InstructionScreen()
 void PlayerOneWins()
 {
 	erase();
-	while (true)
-	{
-		stringstream ss;
-		int mx = LINES;
-		int my = COLS;
-
-
-		refresh();
-
-		//will center TANKS vertically
-		int numOfEndls = (LINES - 22) / 2;
-		//askii art title screen
-
-		for (int i = 0; i < numOfEndls; i++)
-		{
-			ss << endl;
-		}
-		ss << '\t' << "PPPPP   LL       AAAA   YY  YY  EEEEE  RRRRR      11 " << endl;
-		ss << '\t' << "PP  PP  LL      AA  AA   YYYY   EE     RR  RR   1111" << endl;
-		ss << '\t' << "PPPPP   LL      AAAAAA    YY    EEEEE  RRRRR      11" << endl;
-		ss << '\t' << "PP      LL      AA  AA    YY    EE     RR RR      11" << endl;
-		ss << '\t' << "PP      LLLLLL  AA  AA    YY    EEEEE  RR  RR    1111" << endl << endl;
-	
-		ss << '\t' << "WW    WW  IIII  NN  NN   SSSS   !!" << endl;
-		ss << '\t' << "WW    WW   II   NNN NN  SSS     !! " << endl;
-		ss << '\t' << "WW WW WW   II   NNNNNN    SSS   !!" << endl;
-		ss << '\t' << "WWWWWWWW   II   NN NNN  S  SSS  " << endl;
-		ss << '\t' << "WW WW WW  IIII  NN  NN   SSSS   !! " << endl << endl;
-
-		//waste_time();d
-		ss << '\t' << "PRESS Q TO QUIT " << endl << endl;
-		ss << '\t' << "PRESS R TO RESTART " << endl;
-
-		addstr(ss.str().c_str());
-		refresh();
-
-
-	}
+    stringstream ss;
+    
+    //will center TANKS vertically
+    int numOfEndls = (LINES - 22) / 2;
+    //askii art title screen
+    
+    for (int i = 0; i < numOfEndls; i++)
+    {
+        ss << endl;
+    }
+    ss << '\t' << "PPPPP   LL       AAAA   YY  YY  EEEEE  RRRRR      11 " << endl;
+    ss << '\t' << "PP  PP  LL      AA  AA   YYYY   EE     RR  RR   1111" << endl;
+    ss << '\t' << "PPPPP   LL      AAAAAA    YY    EEEEE  RRRRR      11" << endl;
+    ss << '\t' << "PP      LL      AA  AA    YY    EE     RR RR      11" << endl;
+    ss << '\t' << "PP      LLLLLL  AA  AA    YY    EEEEE  RR  RR    1111" << endl << endl;
+    
+    ss << '\t' << "WW    WW  IIII  NN  NN   SSSS   !!" << endl;
+    ss << '\t' << "WW    WW   II   NNN NN  SSS     !! " << endl;
+    ss << '\t' << "WW WW WW   II   NNNNNN    SSS   !!" << endl;
+    ss << '\t' << "WWWWWWWW   II   NN NNN  S  SSS  " << endl;
+    ss << '\t' << "WW WW WW  IIII  NN  NN   SSSS   !! " << endl << endl;
+    
+    //waste_time();d
+    ss << '\t' << "PRESS Q TO QUIT " << endl << endl;
+    ss << '\t' << "PRESS R TO RESTART " << endl;
+    
+    move(1,1);
+    addstr(ss.str().c_str());
+    refresh();
 }
 
 void PlayerTwoWins()
 {
 	erase();
-	while (true)
-	{
-		stringstream ss;
-		int mx = LINES;
-		int my = COLS;
-
-
-		refresh();
-
-		//will center TANKS vertically
-		int numOfEndls = (LINES - 22) / 2;
-		//askii art title screen
-
-		for (int i = 0; i < numOfEndls; i++)
-		{
-			ss << endl;
-		}
-		ss << '\t' << "PPPPP   LL       AAAA   YY  YY  EEEEE  RRRRR    22222" << endl;
-		ss << '\t' << "PP  PP  LL      AA  AA   YYYY   EE     RR  RR  22   22" << endl;
-		ss << '\t' << "PPPPP   LL      AAAAAA    YY    EEEEE  RRRRR       22" << endl;
-		ss << '\t' << "PP      LL      AA  AA    YY    EE     RR RR     22" << endl;
-		ss << '\t' << "PP      LLLLLL  AA  AA    YY    EEEEE  RR  RR  2222222" << endl << endl;
-
-		ss << '\t' << "WW    WW  IIII  NN  NN   SSSS   !!" << endl;
-		ss << '\t' << "WW    WW   II   NNN NN  SSS     !! " << endl;
-		ss << '\t' << "WW WW WW   II   NNNNNN    SSS   !!" << endl;
-		ss << '\t' << "WWWWWWWW   II   NN NNN  S  SSS  " << endl;
-		ss << '\t' << "WW WW WW  IIII  NN  NN   SSSS   !! " << endl << endl;
-
-		ss << '\t' << "PRESS Q TO QUIT " << endl << endl;
-		ss << '\t' << "PRESS R TO RESTART " << endl;
-		//waste_time();d
-
-		addstr(ss.str().c_str());
-		refresh();
-	}
+    stringstream ss;
+    
+    
+    //will center TANKS vertically
+    int numOfEndls = (LINES - 22) / 2;
+    //askii art title screen
+    
+    for (int i = 0; i < numOfEndls; i++)
+    {
+        ss << endl;
+    }
+    ss << '\t' << "PPPPP   LL       AAAA   YY  YY  EEEEE  RRRRR    22222" << endl;
+    ss << '\t' << "PP  PP  LL      AA  AA   YYYY   EE     RR  RR  22   22" << endl;
+    ss << '\t' << "PPPPP   LL      AAAAAA    YY    EEEEE  RRRRR       22" << endl;
+    ss << '\t' << "PP      LL      AA  AA    YY    EE     RR RR     22" << endl;
+    ss << '\t' << "PP      LLLLLL  AA  AA    YY    EEEEE  RR  RR  2222222" << endl << endl;
+    
+    ss << '\t' << "WW    WW  IIII  NN  NN   SSSS   !!" << endl;
+    ss << '\t' << "WW    WW   II   NNN NN  SSS     !! " << endl;
+    ss << '\t' << "WW WW WW   II   NNNNNN    SSS   !!" << endl;
+    ss << '\t' << "WWWWWWWW   II   NN NNN  S  SSS  " << endl;
+    ss << '\t' << "WW WW WW  IIII  NN  NN   SSSS   !! " << endl << endl;
+    
+    ss << '\t' << "PRESS Q TO QUIT " << endl << endl;
+    ss << '\t' << "PRESS R TO RESTART " << endl;
+    //waste_time();d
+    
+    move(1,1);
+    addstr(ss.str().c_str());
+    refresh();
 }
 
 
@@ -427,13 +407,16 @@ int main(int argc, char * argv[])
 	{
         ProcessKeyboard(g, players, turn, keep_going);
         
+        //if neither of the players is hit:
         if ((!players[turn].hit) && (!players[1 - turn].hit))
         {
             DrawScreen(g, players, turn);
             /*if (show_char) { PrintMessage(0, 1, " ", c);}*/
         }
+        //if there had been a hit:
         else
         {
+            //modify scores:
             if(players[turn].hit)
             {
                 players[1 - turn].score++;
@@ -443,6 +426,7 @@ int main(int argc, char * argv[])
                 players[turn].score++;
             }
 
+            //if score for either player is less than 3:
             if ((players[1 - turn].score < 3) && (players[turn].score < 3))
             {
                 //erase current ground and players data and re-initialize game:
@@ -450,6 +434,7 @@ int main(int argc, char * argv[])
                 InitializeGame(g, players);
                 keep_going = true;
             }
+            //if either player has scored a 3:
             else
             {
 				if (players[0].score == 3)
@@ -460,6 +445,8 @@ int main(int argc, char * argv[])
 				{
 					PlayerTwoWins();
 				}
+                
+                
 				int c = getch();
 				if (c == 'q')
 				{
@@ -473,8 +460,9 @@ int main(int argc, char * argv[])
 					InitializeGame(g, players);
 					keep_going = true;
 				}
+                
             }
-        }
+        }//end game loop
     }
     //TODO: insert winner screen function here
 
