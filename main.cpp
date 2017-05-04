@@ -115,6 +115,7 @@ void Hit(Vec2D &v, Player * players, int turn, Ground &g)
     
     for (size_t i = 0; i<hits.size(); i++)
     {
+        //TODO: prevent hits from landing outside the ground vector
         int hit_line = hits.at(i).y;
         int hit_col = hits.at(i).x;
         move(hit_line, hit_col);
@@ -132,15 +133,17 @@ void Hit(Vec2D &v, Player * players, int turn, Ground &g)
         if (g.ground.at(hit_col - 1) > LINES - 2)
             g.ground.at(hit_col - 1) = LINES - 2;
         
-        //check if tanks are hit:
-        for (int i=0;i<2;i++)
+        //check if enemy tank is hit:
+        if ((hit_line == g.ground.at(players[1 - turn].col) - 1) && (hit_col == players[1 - turn].col + 1))
         {
-            if ((hit_line == g.ground.at(players[i].col) - 1) && (hit_col == players[i].col + 1))
-            {
-                //tank is hit!!!
-                players[i].hit = true;
-            }
-        }
+            //enemy tank is hit!!!
+            players[1 - turn].hit = true;        }
+        
+        //check if self hit
+        if ((hit_line == g.ground.at(players[turn].col) - 1) && (hit_col == players[turn].col + 1))
+        {
+            //my tank is hit!!!
+            players[turn].hit = true;        }
         
         /*
         //for debugging purposes: print out a table showing the position of each hit and the position of enemy tank:
@@ -218,6 +221,47 @@ void InitializeGame(Ground &g, Player *players)
     DrawScreen(g, players, turn);
 }
 
+void ProcessKeyboard(Ground &g, Player *players, int & turn, bool &keep_going)
+{
+    bool show_char = false;
+    int c = getch();
+    switch (c)
+    {
+        case 27:
+            keep_going = false;
+            break;
+            
+        case 's':
+            players[turn].PowerDown();
+            break;
+            
+        case 'w':
+            players[turn].PowerUp();
+            break;
+            
+        case 'e':
+            players[turn].AngleUp();
+            break;
+            
+        case 'c':
+            players[turn].AngleDown();
+            break;
+            
+        case 10:
+        case KEY_ENTER:
+#if defined(WIN32)
+        case PADENTER:
+#endif
+            Shoot(g, players, turn, keep_going);
+            turn = 1 - turn;
+            break;
+            
+        default:
+            show_char = true;
+            break;
+    }
+}
+
 int main(int argc, char * argv[])
 {
 	srand((unsigned int)time(nullptr));
@@ -244,53 +288,25 @@ int main(int argc, char * argv[])
     
 	while (keep_going)
 	{
-        bool show_char = false;
-		int c = getch();
-		switch (c)
-		{
-		case 27:
-			keep_going = false;
-			break;
-
-		case 's':
-			players[turn].PowerDown();
-			break;
-
-		case 'w':
-			players[turn].PowerUp();
-			break;
-
-		case 'e':
-			players[turn].AngleUp();
-			break;
-
-		case 'c':
-			players[turn].AngleDown();
-			break;
-
-		case 10:
-		case KEY_ENTER:
-#if defined(WIN32)
-		case PADENTER:
-#endif
-			Shoot(g, players, turn, keep_going);
-			turn = 1 - turn;
-			break;
-
-		default:
-			show_char = true;
-			break;
-		}
+        ProcessKeyboard(g, players, turn, keep_going);
         
-        if (!players[turn].hit)
+        if ((!players[turn].hit) && (!players[1 - turn].hit))
         {
             DrawScreen(g, players, turn);
             /*if (show_char) { PrintMessage(0, 1, " ", c);}*/
         }
         else
         {
-            players[1 - turn].score++;
-            if (players[1 - turn].score < 3)
+            if(players[turn].hit)
+            {
+                players[1 - turn].score++;
+            }
+            else
+            {
+                players[turn].score++;
+            }
+
+            if ((players[1 - turn].score < 3) && (players[turn].score < 3))
             {
                 //erase current ground and players data and re-initialize game:
                 g.ground.clear();
