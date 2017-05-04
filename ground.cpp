@@ -10,6 +10,8 @@
 int base_height_divisor = 8;
 int max_height_divisor = 2;
 
+// have ground be affected by all range of explosion, not just impact place
+
 void Ground::InitializeGround()
 {
 	int current_height = LINES - LINES / base_height_divisor;
