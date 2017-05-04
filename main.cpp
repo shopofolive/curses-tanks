@@ -50,57 +50,43 @@ void MySleep(int milliseconds)
 void TitleScreen()
 {
 	erase();
-	while (true)
-	{
 		stringstream ss;
 
 
-		refresh();
 
 		//will center TANKS vertically
-		int numOfEndls = (LINES - 22) / 2;
+		//int numOfEndls = (LINES - 22) / 2;
 		//askii art title screen
 
-		for (int i = 0; i < numOfEndls; i++)
+		/*for (int i = 0; i < numOfEndls; i++)
 		{
 			ss << endl;
-		}
-		ss << '\t' << "TTTTTTTTTTTTTTT   AAAAAAAAAAA   NNNNNNN    NNNNN  KKKKK   KKKKK  SSSSSSSSSS" << endl;
-		ss << '\t' << "TTTTTTTTTTTTTTT  AAAAAAAAAAAAA  NNNNNNNN   NNNNN  KKKKK  KKKKK  SSSSSSSSSSSS" << endl;
-		ss << '\t' << "TTTTTTTTTTTTTTT  AAAAA   AAAAA  NNNNNNNNN  NNNNN  KKKKK KKKKK   SSSSS  SSSSS" << endl;
-		ss << '\t' << "     TTTTT       AAAAA   AAAAA  NNNNNNNNNN NNNNN  KKKKKKKKKK     SSSSSSS  " << endl;
-		ss << '\t' << "     TTTTT       AAAAAAAAAAAAA  NNNNN NNNNNNNNNN  KKKKKKKKKK        SSSSSSSS " << endl;
-		ss << '\t' << "     TTTTT       AAAAAAAAAAAAA  NNNNN  NNNNNNNNN  KKKKK KKKKK   SSSSS  SSSSS" << endl;
-		ss << '\t' << "     TTTTT       AAAAA   AAAAA  NNNNN   NNNNNNNN  KKKKK  KKKKK  SSSSSSSSSSSS" << endl;
-		ss << '\t' << "     TTTTT       AAAAA   AAAAA  NNNNN    NNNNNNN  KKKKK   KKKKK  SSSSSSSSSS" << endl;
-		ss << '\t' << "------------------------------------------------------------------------------" << endl;
-		ss << '\t' << " PRESS D TO START" << endl;
+		}*/
+		ss  << " TTTTTTTTTTTTTTT   AAAAAAAAAAA   NNNNNNN    NNNNN  KKKKK   KKKKK  SSSSSSSSSS" << endl;
+		ss  << " TTTTTTTTTTTTTTT  AAAAAAAAAAAAA  NNNNNNNN   NNNNN  KKKKK  KKKKK  SSSSSSSSSSSS" << endl;
+		ss  << " TTTTTTTTTTTTTTT  AAAAA   AAAAA  NNNNNNNNN  NNNNN  KKKKK KKKKK   SSSSS  SSSSS" << endl;
+		ss  << "      TTTTT       AAAAA   AAAAA  NNNNNNNNNN NNNNN  KKKKKKKKKK     SSSSSSS  " << endl;
+		ss  << "      TTTTT       AAAAAAAAAAAAA  NNNNN NNNNNNNNNN  KKKKKKKKKK        SSSSSSSS " << endl;
+		ss << "      TTTTT       AAAAAAAAAAAAA  NNNNN  NNNNNNNNN  KKKKK KKKKK   SSSSS  SSSSS" << endl;
+		ss  << "      TTTTT       AAAAA   AAAAA  NNNNN   NNNNNNNN  KKKKK  KKKKK  SSSSSSSSSSSS" << endl;
+		ss << "      TTTTT       AAAAA   AAAAA  NNNNN    NNNNNNN  KKKKK   KKKKK  SSSSSSSSSS" << endl;
+		ss  << " ------------------------------------------------------------------------------" << endl;
+		ss << endl << endl << endl;
 
 		//waste_time();d
+		move(5,0);
         addstr(ss.str().c_str());
 		refresh();
-	}
+		MySleep(1000);
 }
 
 void InstructionScreen()
 {
 		erase();
-		while (true)
-		{
 			stringstream ss;
 
-
-			refresh();
-
-			//will center TANKS vertically
-			int numOfEndls = (LINES - 22) / 2;
-			//askii art title screen
-
-			for (int i = 0; i < numOfEndls; i++)
-			{
-				ss << endl;
-			}
-			ss << '\t' << "BE THE FIRST TO REACH 3 POINTS!" << endl << endl;
+			// Fix output TODO
+			ss << '\t' << "        BE THE FIRST TO REACH 3 POINTS!" << endl << endl;
 			ss << '\t' << "-----------------------------------------" << endl;
 			ss << '\t' << "*               CONTROLS:               *" << endl;
 			ss << '\t' << "-----------------------------------------" << endl;
@@ -108,7 +94,7 @@ void InstructionScreen()
 			ss << '\t' << "*                  USE                  *" << endl;
 			ss << '\t' << "*                                       *" << endl;
 			ss << '\t' << "*                   W   E               *" << endl;
-			ss << '\t' << "*	           A   S   D     ENTER     *" << endl;
+			ss << '\t' << "*	           A   S   D     ENTER     *" << endl; 
 			ss << '\t' << "*                       C		       *" << endl;
 			ss << '\t' << "*                                       *" << endl;
 			ss << '\t' << "*      W       INCREASE POWER LEVEL     *" << endl;
@@ -120,14 +106,13 @@ void InstructionScreen()
 			ss << '\t' << "*      ENTER	  SHOOT			           *" << endl;
 			ss << '\t' << "*                                       *" << endl;
 			ss << '\t' << "-----------------------------------------" << endl;
-
-			
+			ss << endl << endl;
+			ss << "                            PRESS ANY KEY TO START" << endl;
 
 			//waste_time();d
             
 			addstr(ss.str().c_str());
 			refresh();
-	}
 }
 
 void PlayerOneWins()
@@ -399,7 +384,11 @@ int main(int argc, char * argv[])
 	keypad(stdscr, 1);
     curs_set(0);
     
-	// TitleScreen();
+	
+	TitleScreen();
+	
+	InstructionScreen();
+	int c = getch();
 
     InitializeGame(g, players);
 
