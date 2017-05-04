@@ -20,7 +20,6 @@
 #include "ground.hpp"
 #include "player.hpp"
 
-
 using namespace std;
 
 extern int base_height_divisor;
@@ -137,13 +136,16 @@ void Hit(Vec2D &v, Player * players, int turn, Ground &g)
         if ((hit_line == g.ground.at(players[1 - turn].col) - 1) && (hit_col == players[1 - turn].col + 1))
         {
             //enemy tank is hit!!!
-            players[1 - turn].hit = true;        }
+            players[1 - turn].hit = true;
+            flash();
+        }
         
         //check if self hit
         if ((hit_line == g.ground.at(players[turn].col) - 1) && (hit_col == players[turn].col + 1))
         {
             //my tank is hit!!!
-            players[turn].hit = true;        }
+            players[turn].hit = true;
+        }
         
         /*
         //for debugging purposes: print out a table showing the position of each hit and the position of enemy tank:
@@ -275,7 +277,7 @@ int main(int argc, char * argv[])
 	noecho();
 	keypad(stdscr, 1);
     curs_set(0);
-
+    
 	/*
     TitleScreen();
 	while (getch() != 'G')
