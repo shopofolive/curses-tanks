@@ -1,4 +1,4 @@
-//testing synchronous movement branch
+//SYNCHRONOUS MOVEMENT
 
 #include <iostream>
 #include <sstream>
@@ -83,15 +83,39 @@ void MySleep(int milliseconds)
 	usleep(milliseconds * 1000);
 #endif
 }
-void DrawScreen(Ground & g, Player * players, int turn)
+void DrawScreen(Ground & g, Player * players)
 {
 	erase();
 	box(stdscr, 0, 0);
 	g.Draw();
 	players[0].Draw(g);
 	players[1].Draw(g);
-	players[0].DrawSettings(turn);
-	players[1].DrawSettings(turn);
+	players[0].DrawSettings(0);
+	players[1].DrawSettings(1);
+    
+    //this whole thing should be in players[i].DrawShots();
+    for (int i=0;i<2;i++)
+    {
+        if (players[i].is_shooting)
+        {
+            for (size_t s = 0; s<players[i].shots.size();s++)
+            {
+                //x then y because the Vec2D was created from Shoot() as y then x, so it has to be reversed
+                move(players[i].shots.at(s).x, players[i].shots.at(s).y);
+                addch('*');
+            }
+            
+            if (players[i].shots.size() > 0)
+            {
+                //delete the first element in the vector:
+                players[i].shots.erase(players[i].shots.begin());
+            }
+            else
+            {
+                players[i].is_shooting = false;
+            }
+        }
+    }
 	refresh();
 }
 
@@ -166,22 +190,22 @@ void Hit(Vec2D &v, Player * players, int turn, Ground &g)
     }
     
     refresh();
-	MySleep(500);
+	//MySleep(500);
 }
 
 //http://www.iforce2d.net/b2dtut/projected-trajectory
 
-void Shoot(Ground & g, Player * players, int turn, bool &keep_going){
-	double angle = players[turn].angle / 180.0 * PI;
+void Shoot(Ground & g, Player * players, int player){
+	double angle = players[player].angle / 180.0 * PI;
     double time_divisor = 5.0;
-	Vec2D force(sin(angle) * players[turn].power * 0.2, cos(angle) * players[turn].power * 0.2);
-    if (players[turn].s == RIGHT)
+	Vec2D force(sin(angle) * players[player].power * 0.2, cos(angle) * players[player].power * 0.2);
+    if (players[player].s == RIGHT)
         force.x = -force.x;
     Vec2D gravity(0.0, -0.98);
     //the starting point is above the actual position of the tank, to prevent self-injury in the first moments of the shot;
-    int p_col = players[turn].col;
-    int p_line = LINES - g.ground.at(players[turn].col);
-    if (turn == 0)
+    int p_col = players[player].col;
+    int p_line = LINES - g.ground.at(players[player].col);
+    if (player == 0)
         p_col++;
     Vec2D p0(p_col,p_line);
     
@@ -199,33 +223,30 @@ void Shoot(Ground & g, Player * players, int turn, bool &keep_going){
         }
 		if (pN.y >= g.ground.at((int)pN.x))
 		{
-			Hit(pN, players, turn, g);
+			Hit(pN, players, player, g);
 			MySleep(20);
 			break;
 		}
         
         move((int)pN.y - 1, (int)pN.x + 1);
         addch('*'); instead:
+        //Vec2D v((int)pN.y - 1, (int)pN.x + 1);
+        //players[player].shots.push_back(v);
         refresh();
-        MySleep(20);
-		if ((players[1 - turn].hit) || (players[turn].hit))
-		{
-			keep_going = false;
-		}
+        //MySleep(20);
     }
 }
 
 void InitializeGame(Ground &g, Player *players)
 {
-    int turn = 0;
     g.InitializeGround();
     //make sure the tank is positioned not too close to either border, otherwise Shoot() will result in errors:
     players[0].Initialize(rand() % (COLS / 4) + 5, LEFT);
     players[1].Initialize(rand() % (COLS / 4) + 3 * COLS / 4 - 5, RIGHT);
-    DrawScreen(g, players, turn);
+    DrawScreen(g, players);
 }
 
-void ProcessKeyboard(Ground &g, Player *players, int & turn, bool &keep_going)
+void ProcessKeyboard(Ground &g, Player *players, bool &keep_going)
 {
     bool show_char = false;
     int c = getch();
@@ -235,20 +256,60 @@ void ProcessKeyboard(Ground &g, Player *players, int & turn, bool &keep_going)
             keep_going = false;
             break;
             
+        //Player 0:
         case 's':
-            players[turn].PowerDown();
+            players[0].PowerDown();
             break;
             
         case 'w':
-            players[turn].PowerUp();
+            players[0].PowerUp();
             break;
             
-        case 'e':
-            players[turn].AngleUp();
+        case 'q':
+            players[0].AngleUp();
             break;
             
-        case 'c':
-            players[turn].AngleDown();
+        case 'a':
+            players[0].AngleDown();
+            break;
+            
+        case 'z':
+            players[0].col--;
+        break;
+            
+        case 'x':
+            players[0].col++;
+            break;
+            
+        case 32:
+            Shoot(g, players, 0);
+            break;
+            
+        
+        //Player 1:
+            
+        case ';':
+            players[1].PowerDown();
+            break;
+            
+        case '[':
+            players[1].PowerUp();
+            break;
+            
+        case ']':
+            players[1].AngleUp();
+            break;
+            
+        case '\'':
+            players[1].AngleDown();
+            break;
+            
+        case '.':
+            players[1].col--;
+            break;
+            
+        case '/':
+            players[1].col++;
             break;
             
         case 10:
@@ -256,13 +317,32 @@ void ProcessKeyboard(Ground &g, Player *players, int & turn, bool &keep_going)
 #if defined(WIN32)
         case PADENTER:
 #endif
-            Shoot(g, players, turn, keep_going);
-            turn = 1 - turn;
+            Shoot(g, players, 1);
             break;
             
-        default:
+        case ERR:
             show_char = true;
             break;
+    }
+}
+
+void ApplyChanges(Ground &g, Player *players, bool &keep_going)
+{
+    for (int i=0;i<2;i++)
+    {
+        //update score:
+        if(players[i].hit)
+        {
+            players[1 - i].score++;
+            //erase current ground and players data and re-initialize game:
+            g.ground.clear();
+            InitializeGame(g, players);
+        }
+        
+        if (players[i].score >= 3)
+        {
+            keep_going = false;
+        }
     }
 }
 
@@ -270,7 +350,6 @@ int main(int argc, char * argv[])
 {
 	srand((unsigned int)time(nullptr));
 
-	int turn = 0;
 	bool keep_going = true;
 	Ground g;
 	Player players[2];
@@ -279,6 +358,7 @@ int main(int argc, char * argv[])
 	noecho();
 	keypad(stdscr, 1);
     curs_set(0);
+    nodelay(stdscr, 0);
     
 	/*
     TitleScreen();
@@ -287,42 +367,21 @@ int main(int argc, char * argv[])
 		continue;
 	}
      */
+    
+    nodelay(stdscr, 1);
 
     InitializeGame(g, players);
     
+    //GAME LOOP:
 	while (keep_going)
 	{
-        ProcessKeyboard(g, players, turn, keep_going);
+        ProcessKeyboard(g, players, keep_going);
+        ApplyChanges(g, players, keep_going);
         
-        if ((!players[turn].hit) && (!players[1 - turn].hit))
-        {
-            DrawScreen(g, players, turn);
-            /*if (show_char) { PrintMessage(0, 1, " ", c);}*/
-        }
-        else
-        {
-            if(players[turn].hit)
-            {
-                players[1 - turn].score++;
-            }
-            else
-            {
-                players[turn].score++;
-            }
-
-            if ((players[1 - turn].score < 3) && (players[turn].score < 3))
-            {
-                //erase current ground and players data and re-initialize game:
-                g.ground.clear();
-                InitializeGame(g, players);
-                keep_going = true;
-            }
-            else
-            {
-                break;
-            }
-        }
-    }
+        DrawScreen(g, players);
+        
+    }//END GAME LOOP
+    
     //TODO: insert winner screen function here
 	erase();
 	echo();

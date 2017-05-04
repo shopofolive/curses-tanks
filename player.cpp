@@ -25,6 +25,8 @@ Player::Player()
 	power = 30.0;
 	hit = false;
     score = 0;
+    is_shooting = false;
+    
 	// bool hit <- will be at end of shoot function.
 	// checks after each function whether it hit player
 	// if yes, trigger winner screen.
@@ -70,10 +72,9 @@ void Player::AngleDown()
 		angle = 0.0;
 }
 
-void Player::DrawSettings(int turn)
+void Player::DrawSettings(int num)
 {
-	bool my_turn = (turn == 0 && s == LEFT) || (turn == 1 && s == RIGHT);
-
+	
 	int starting_column = 2;
 	int line = 1;
 	char player = (s == LEFT) ? '1' : '2';
@@ -82,12 +83,8 @@ void Player::DrawSettings(int turn)
 	if (s == RIGHT)
 		starting_column = COLS - 18;
 
-	if (my_turn)
-		attron(A_STANDOUT);
 	ss << setw(10) << left << "Player:" << player;
 	mvaddstr(line++, starting_column, ss.str().c_str());
-	if (my_turn)
-		attroff(A_STANDOUT);
 
 	ss = stringstream();
 	ss << setw(10) << left << "Angle: " << setw(6) << angle;
