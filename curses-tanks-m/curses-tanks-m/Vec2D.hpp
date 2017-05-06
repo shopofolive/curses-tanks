@@ -18,7 +18,6 @@ public:
     Vec2D();
     Vec2D(double sx, double sy);
     Vec2D(int sx, int sy);
-    Vec2D(const Vec2D& v);
     
     Vec2D operator*(const double&) const;
     

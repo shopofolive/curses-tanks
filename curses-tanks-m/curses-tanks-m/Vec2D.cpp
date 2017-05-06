@@ -16,34 +16,33 @@ Vec2D::Vec2D()
     y = 0.0;
 }
 
+//sometimes two doubles may go here:
 Vec2D::Vec2D(double sx, double sy)
 {
     x = sx;
     y = sy;
 }
 
+//sometimes two ints may go here:
 Vec2D::Vec2D(int sx, int sy)
 {
     x = double(sx);
     y = double(sy);
 }
 
-Vec2D::Vec2D(const Vec2D& v)
-{
-    x = v.x;
-    y = v.y;
-}
-
+//operator overload for * in case of two doubles
 Vec2D Vec2D::operator*(const double& scalar) const
 {
     return Vec2D(x*scalar, y*scalar);
 }
 
+//operator overload for * in case of two ints
 Vec2D Vec2D::operator*(const int scalar) const
 {
     return Vec2D(x*scalar, y*scalar);
 }
 
+//operator overload for +
 Vec2D Vec2D::operator+(const Vec2D &v) const
 {
     return Vec2D(x+v.x, y+v.y);
