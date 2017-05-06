@@ -81,25 +81,25 @@ void InstructionScreen()
     
     // Fix output TODO
     ss << '\t' << "        BE THE FIRST TO REACH 3 POINTS!" << endl << endl;
-    ss << '\t' << "-----------------------------------------" << endl;
-    ss << '\t' << "*               CONTROLS:               *" << endl;
-    ss << '\t' << "-----------------------------------------" << endl;
-    ss << '\t' << "*                                       *" << endl;
-    ss << '\t' << "*                  USE                  *" << endl;
-    ss << '\t' << "*                                       *" << endl;
-    ss << '\t' << "*                   W   E               *" << endl;
-    ss << '\t' << "*	           A   S   D     ENTER     *" << endl;
-    ss << '\t' << "*                       C		       *" << endl;
-    ss << '\t' << "*                                       *" << endl;
-    ss << '\t' << "*      W       INCREASE POWER LEVEL     *" << endl;
-    ss << '\t' << "*      S       DECREASE POWER LEVEL     *" << endl;
-    ss << '\t' << "*      A	      MOVE LEFT		           *" << endl;
-    ss << '\t' << "*      D	      MOVE RIGHT		       *" << endl;
-    ss << '\t' << "*      E	      INCREASE ANGL  	       *" << endl;
-    ss << '\t' << "*      C       DECREASE ANGLE           *" << endl;
-    ss << '\t' << "*      ENTER	  SHOOT			           *" << endl;
-    ss << '\t' << "*                                       *" << endl;
-    ss << '\t' << "-----------------------------------------" << endl;
+    ss << '\t' << setw(40) << setfill('-') << ""<< '\t' << endl;
+    ss << '\t' << "*" << setfill(' ') << '\t' << "CONTROLS:" << setfill(' ') << '\t' << '\t' << "*" << endl;
+    ss << '\t' << setw(40) << setfill('-') << "" << '\t' << '\t' << endl;
+    ss << '\t' << setw(40) << "*" << '\t' << '\t' << '\t' << '\t' << "*" << endl;
+    ss << '\t' << "*                  USE                  "<< '\t' << "*" << endl;
+    ss << '\t' << "*                                       "<< '\t' << "*" << endl;
+    ss << '\t' << "*                   W   E               "<< '\t' << "*" << endl;
+    ss << '\t' << "*	           A   S   D     ENTER     "<< '\t' << "*" << endl;
+    ss << '\t' << "*                       C		       "<< '\t' << "*" << endl;
+    ss << '\t' << "*                                       "<< '\t' << "*" << endl;
+    ss << '\t' << "*      W       INCREASE POWER LEVEL     "<< '\t' << "*" << endl;
+    ss << '\t' << "*      S       DECREASE POWER LEVEL     "<< '\t' << "*" << endl;
+    ss << '\t' << "*      A	      MOVE LEFT           "<< '\t' << "*" << endl;
+    ss << '\t' << "*      D	      MOVE RIGHT	"<< '\t' << "*" << endl;
+    ss << '\t' << "*      E	      INCREASE ANGL  	       "<< '\t' << "*" << endl;
+    ss << '\t' << "*      C       DECREASE ANGLE           "<< '\t' << "*" << endl;
+    ss << '\t' << "*      ENTER	  SHOOT			"<< '\t' << "*" << endl;
+    ss << '\t' << "*                                       "<< '\t' << "*" << endl;
+    ss << '\t' << "-----------------------------------------"<< '\t' << "*" << endl;
     ss << endl << endl;
     ss << "                            PRESS ANY KEY TO START" << endl;
     
@@ -112,6 +112,7 @@ void InstructionScreen()
 void PlayerOneWins()
 {
     erase();
+
     stringstream ss;
     
     //will center TANKS vertically
@@ -311,25 +312,54 @@ void ProcessKeyboard(Ground &g, Player *players, bool &keep_going)
     }
 }
 
-//update scores:
+//update scores; quit or restart game:
 void ApplyChanges(Ground &g, Player *players, bool &keep_going)
 {
-    for (int i=0;i<2;i++)
+    if (players[0].hit || players[1].hit)
     {
-        //update score:
-        if(players[i].hit)
+        for (int i=0;i<2;i++)
         {
-            players[1 - i].score++;
-            
+            //update score:
+            if(players[i].hit)
+            {
+                players[1 - i].score++;
+            }
+        }
+        if (players[0].score < 3 && players[1].score < 3)
+        {
             //erase current ground and players data and re-initialize game:
             g.ground.clear();
             InitializeGame(g, players);
         }
-        
-        //if either player's score reaches 3, quit game:
-        if (players[i].score >= 3)
+        else
         {
-            keep_going = false;
+            if (players[0].score == 3)
+            {
+                PlayerOneWins();
+            }
+            else if (players[1].score == 3)
+            {
+                PlayerOneWins();
+            }
+            
+            nodelay(stdscr, 0);
+            
+            int c = getch();
+            
+            if (c == 'r')
+            {
+                players[0].score = 0;
+                players[1].score = 0;
+                //erase current ground and players data and re-initialize game:
+                g.ground.clear();
+                InitializeGame(g, players);
+                
+                nodelay(stdscr, 1);
+            }
+            else
+            {
+                keep_going = false;
+            }
         }
     }
 }
@@ -380,6 +410,11 @@ int main(int argc, char * argv[])
 	keypad(stdscr, 1);
     //make cursor invisible:
     curs_set(0);
+    
+    TitleScreen();
+    
+    InstructionScreen();
+    getch();
     
     //disable waiting for keyboard input to be entered when getch() is invoked:
     nodelay(stdscr, 1);
