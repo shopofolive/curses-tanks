@@ -81,25 +81,25 @@ void InstructionScreen()
     
     // Fix output TODO
     ss << '\t' << "        BE THE FIRST TO REACH 3 POINTS!" << endl << endl;
-    ss << '\t' << setw(40) << setfill('-') << ""<< '\t' << endl;
-    ss << '\t' << "*" << setfill(' ') << '\t' << "CONTROLS:" << setfill(' ') << '\t' << '\t' << "*" << endl;
-    ss << '\t' << setw(40) << setfill('-') << "" << '\t' << '\t' << endl;
-    ss << '\t' << setw(40) << "*" << '\t' << '\t' << '\t' << '\t' << "*" << endl;
-    ss << '\t' << "*                  USE                  "<< '\t' << "*" << endl;
-    ss << '\t' << "*                                       "<< '\t' << "*" << endl;
-    ss << '\t' << "*                   W   E               "<< '\t' << "*" << endl;
-    ss << '\t' << "*	           A   S   D     ENTER     "<< '\t' << "*" << endl;
-    ss << '\t' << "*                       C		       "<< '\t' << "*" << endl;
-    ss << '\t' << "*                                       "<< '\t' << "*" << endl;
-    ss << '\t' << "*      W       INCREASE POWER LEVEL     "<< '\t' << "*" << endl;
-    ss << '\t' << "*      S       DECREASE POWER LEVEL     "<< '\t' << "*" << endl;
-    ss << '\t' << "*      A	      MOVE LEFT           "<< '\t' << "*" << endl;
-    ss << '\t' << "*      D	      MOVE RIGHT	"<< '\t' << "*" << endl;
-    ss << '\t' << "*      E	      INCREASE ANGL  	       "<< '\t' << "*" << endl;
-    ss << '\t' << "*      C       DECREASE ANGLE           "<< '\t' << "*" << endl;
-    ss << '\t' << "*      ENTER	  SHOOT			"<< '\t' << "*" << endl;
-    ss << '\t' << "*                                       "<< '\t' << "*" << endl;
-    ss << '\t' << "-----------------------------------------"<< '\t' << "*" << endl;
+    ss << '\t' << "-----------------------------------------" << endl;
+    ss << '\t' << "*               CONTROLS:               *" << endl;
+    ss << '\t' << "-----------------------------------------" << endl;
+    ss << '\t' << "*                                       *" << endl;
+    ss << '\t' << "*                  USE                  *" << endl;
+    ss << '\t' << "*                                       *" << endl;
+    ss << '\t' << "*                   W   E               *" << endl;
+    ss << '\t' << "*	           A   S   D     ENTER     *" << endl;
+    ss << '\t' << "*                       C		       *" << endl;
+    ss << '\t' << "*                                       *" << endl;
+    ss << '\t' << "*      W       INCREASE POWER LEVEL     *" << endl;
+    ss << '\t' << "*      S       DECREASE POWER LEVEL     *" << endl;
+    ss << '\t' << "*      A	      MOVE LEFT		           *" << endl;
+    ss << '\t' << "*      D	      MOVE RIGHT		       *" << endl;
+    ss << '\t' << "*      E	      INCREASE ANGL  	       *" << endl;
+    ss << '\t' << "*      C       DECREASE ANGLE           *" << endl;
+    ss << '\t' << "*      ENTER	  SHOOT			           *" << endl;
+    ss << '\t' << "*                                       *" << endl;
+    ss << '\t' << "-----------------------------------------" << endl;
     ss << endl << endl;
     ss << "                            PRESS ANY KEY TO START" << endl;
     
@@ -108,6 +108,7 @@ void InstructionScreen()
     addstr(ss.str().c_str());
     refresh();
 }
+
 
 void PlayerOneWins()
 {
@@ -339,7 +340,7 @@ void ApplyChanges(Ground &g, Player *players, bool &keep_going)
             }
             else if (players[1].score == 3)
             {
-                PlayerOneWins();
+                PlayerTwoWins();
             }
             
             nodelay(stdscr, 0);
