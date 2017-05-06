@@ -208,17 +208,18 @@ void Player::Hit(Vec2D &v, Player & other, Ground &g)
         int hit_line = hts.at(i).y;
         int hit_col = hts.at(i).x;
         
-        if ((hit_line == g.ground.at(hit_col)) || (hit_line + 1 == g.ground.at(hit_col)))
+        if (hit_col > 0 && hit_col < COLS - 5)
         {
-            Vec2D v(hit_line, hit_col);
-            hits.push_back(v);
+            if ((hit_line == g.ground.at(hit_col)) || (hit_line + 1 == g.ground.at(hit_col)))
+            {
+                Vec2D v(hit_line, hit_col);
+                hits.push_back(v);
+            }
         }
     }
     
     refresh();
 }
-
-
 
 void Player::Shoot(Ground & g, Player & other)
 {

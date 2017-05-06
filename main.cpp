@@ -21,6 +21,7 @@
 
 #include "ground.hpp"
 #include "player.hpp"
+#include "SDL2/SDL.h"
 
 using namespace std;
 
@@ -209,7 +210,9 @@ void ApplyChanges(Ground &g, Player *players, bool &keep_going)
 
 int main(int argc, char * argv[])
 {
-	srand((unsigned int)time(nullptr));
+    
+    
+    srand((unsigned int)time(nullptr));
 
 	bool keep_going = true;
 	Ground g;

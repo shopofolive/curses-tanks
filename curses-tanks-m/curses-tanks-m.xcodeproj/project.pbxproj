@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		6A252CC21EB8A3AC00ED0844 /* Vec2D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6A252CC01EB8A3AC00ED0844 /* Vec2D.cpp */; };
+		6A252CCD1EBD416C00ED0844 /* SDL2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6A252CCC1EBD416C00ED0844 /* SDL2.framework */; };
 		C0472D4A1EB2AEB00045A747 /* ground.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C0472D451EB2AEB00045A747 /* ground.cpp */; };
 		C0472D4B1EB2AEB00045A747 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C0472D471EB2AEB00045A747 /* main.cpp */; };
 		C0472D4C1EB2AEB00045A747 /* player.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C0472D481EB2AEB00045A747 /* player.cpp */; };
@@ -31,6 +32,7 @@
 /* Begin PBXFileReference section */
 		6A252CC01EB8A3AC00ED0844 /* Vec2D.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Vec2D.cpp; sourceTree = "<group>"; };
 		6A252CC11EB8A3AC00ED0844 /* Vec2D.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Vec2D.hpp; sourceTree = "<group>"; };
+		6A252CCC1EBD416C00ED0844 /* SDL2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2.framework; path = ../../../../../../Library/Frameworks/SDL2.framework; sourceTree = "<group>"; };
 		C0472D3A1EB2AE3A0045A747 /* curses-tanks-m */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "curses-tanks-m"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C0472D451EB2AEB00045A747 /* ground.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ground.cpp; path = ../../ground.cpp; sourceTree = "<group>"; };
 		C0472D461EB2AEB00045A747 /* ground.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = ground.hpp; path = ../../ground.hpp; sourceTree = "<group>"; };
@@ -45,6 +47,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6A252CCD1EBD416C00ED0844 /* SDL2.framework in Frameworks */,
 				C0472D501EB2AEF10045A747 /* libncurses.tbd in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -86,6 +89,7 @@
 		C0472D4E1EB2AEF10045A747 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				6A252CCC1EBD416C00ED0844 /* SDL2.framework */,
 				C0472D4F1EB2AEF10045A747 /* libncurses.tbd */,
 			);
 			name = Frameworks;
@@ -248,6 +252,10 @@
 		C0472D421EB2AE3A0045A747 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(LOCAL_LIBRARY_DIR)/Frameworks",
+				);
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -256,6 +264,10 @@
 		C0472D431EB2AE3A0045A747 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(LOCAL_LIBRARY_DIR)/Frameworks",
+				);
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
