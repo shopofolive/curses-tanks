@@ -29,48 +29,153 @@ using namespace std;
 //defined in ground.cpp:
 extern int base_height_divisor;
 
-//print title screen:
-void TitleScreen()
-{
-	erase();
-	while (getch() == ERR)
-	{
-		stringstream ss;
-		refresh();
-
-		//will center TANKS vertically
-		int numOfEndls = (LINES - 22) / 2;
-		//askii art title screen
-
-		for (int i = 0; i < numOfEndls; i++)
-		{
-			ss << endl;
-		}
-		ss << '\t' << "TTTTTTTTTTTTTTT   AAAAAAAAAAA   NNNNNNN    NNNNN  KKKKK   KKKKK  SSSSSSSSSS" << endl;
-		ss << '\t' << "TTTTTTTTTTTTTTT  AAAAAAAAAAAAA  NNNNNNNN   NNNNN  KKKKK  KKKKK  SSSSSSSSSSSS" << endl;
-		ss << '\t' << "TTTTTTTTTTTTTTT  AAAAA   AAAAA  NNNNNNNNN  NNNNN  KKKKK KKKKK   SSSSS  SSSSS" << endl;
-		ss << '\t' << "     TTTTT       AAAAA   AAAAA  NNNNNNNNNN NNNNN  KKKKKKKKKK     SSSSSSS  " << endl;
-		ss << '\t' << "     TTTTT       AAAAAAAAAAAAA  NNNNN NNNNNNNNNN  KKKKKKKKKK        SSSSSSSS " << endl;
-		ss << '\t' << "     TTTTT       AAAAAAAAAAAAA  NNNNN  NNNNNNNNN  KKKKK KKKKK   SSSSS  SSSSS" << endl;
-		ss << '\t' << "     TTTTT       AAAAA   AAAAA  NNNNN   NNNNNNNN  KKKKK  KKKKK  SSSSSSSSSSSS" << endl;
-		ss << '\t' << "     TTTTT       AAAAA   AAAAA  NNNNN    NNNNNNN  KKKKK   KKKKK  SSSSSSSSSS" << endl;
-		ss << '\t' << "------------------------------------------------------------------------------" << endl;
-		ss << '\t' << " PRESS ENTER TO START" << endl;
-		//waste_time();
-
-		addstr(ss.str().c_str());
-		refresh();
-	}
-}
-
 //delay game for int milliseconds:
 void MySleep(int milliseconds)
 {
 #if defined(WIN32)
-	Sleep(milliseconds);
+    Sleep(milliseconds);
 #else
-	usleep(milliseconds * 1000);
+    usleep(milliseconds * 1000);
 #endif
+}
+
+
+//print title screen:
+void TitleScreen()
+{
+    erase();
+    stringstream ss;
+    
+    
+    
+    //will center TANKS vertically
+    //int numOfEndls = (LINES - 22) / 2;
+    //askii art title screen
+    
+    /*for (int i = 0; i < numOfEndls; i++)
+     {
+     ss << endl;
+     }*/
+    ss  << " TTTTTTTTTTTTTTT   AAAAAAAAAAA   NNNNNNN    NNNNN  KKKKK   KKKKK  SSSSSSSSSS" << endl;
+    ss  << " TTTTTTTTTTTTTTT  AAAAAAAAAAAAA  NNNNNNNN   NNNNN  KKKKK  KKKKK  SSSSSSSSSSSS" << endl;
+    ss  << " TTTTTTTTTTTTTTT  AAAAA   AAAAA  NNNNNNNNN  NNNNN  KKKKK KKKKK   SSSSS  SSSSS" << endl;
+    ss  << "      TTTTT       AAAAA   AAAAA  NNNNNNNNNN NNNNN  KKKKKKKKKK     SSSSSSS  " << endl;
+    ss  << "      TTTTT       AAAAAAAAAAAAA  NNNNN NNNNNNNNNN  KKKKKKKKKK        SSSSSSSS " << endl;
+    ss << "      TTTTT       AAAAAAAAAAAAA  NNNNN  NNNNNNNNN  KKKKK KKKKK   SSSSS  SSSSS" << endl;
+    ss  << "      TTTTT       AAAAA   AAAAA  NNNNN   NNNNNNNN  KKKKK  KKKKK  SSSSSSSSSSSS" << endl;
+    ss << "      TTTTT       AAAAA   AAAAA  NNNNN    NNNNNNN  KKKKK   KKKKK  SSSSSSSSSS" << endl;
+    ss  << " ------------------------------------------------------------------------------" << endl;
+    ss << endl << endl << endl;
+    
+    //waste_time();d
+    move(5,0);
+    addstr(ss.str().c_str());
+    refresh();
+    MySleep(1000);
+}
+
+void InstructionScreen()
+{
+    erase();
+    stringstream ss;
+    
+    // Fix output TODO
+    ss << '\t' << "        BE THE FIRST TO REACH 3 POINTS!" << endl << endl;
+    ss << '\t' << "-----------------------------------------" << endl;
+    ss << '\t' << "*               CONTROLS:               *" << endl;
+    ss << '\t' << "-----------------------------------------" << endl;
+    ss << '\t' << "*                                       *" << endl;
+    ss << '\t' << "*                  USE                  *" << endl;
+    ss << '\t' << "*                                       *" << endl;
+    ss << '\t' << "*                   W   E               *" << endl;
+    ss << '\t' << "*	           A   S   D     ENTER     *" << endl;
+    ss << '\t' << "*                       C		       *" << endl;
+    ss << '\t' << "*                                       *" << endl;
+    ss << '\t' << "*      W       INCREASE POWER LEVEL     *" << endl;
+    ss << '\t' << "*      S       DECREASE POWER LEVEL     *" << endl;
+    ss << '\t' << "*      A	      MOVE LEFT		           *" << endl;
+    ss << '\t' << "*      D	      MOVE RIGHT		       *" << endl;
+    ss << '\t' << "*      E	      INCREASE ANGL  	       *" << endl;
+    ss << '\t' << "*      C       DECREASE ANGLE           *" << endl;
+    ss << '\t' << "*      ENTER	  SHOOT			           *" << endl;
+    ss << '\t' << "*                                       *" << endl;
+    ss << '\t' << "-----------------------------------------" << endl;
+    ss << endl << endl;
+    ss << "                            PRESS ANY KEY TO START" << endl;
+    
+    //waste_time();d
+    
+    addstr(ss.str().c_str());
+    refresh();
+}
+
+void PlayerOneWins()
+{
+    erase();
+    stringstream ss;
+    
+    //will center TANKS vertically
+    int numOfEndls = (LINES - 22) / 2;
+    //askii art title screen
+    
+    for (int i = 0; i < numOfEndls; i++)
+    {
+        ss << endl;
+    }
+    ss << '\t' << "PPPPP   LL       AAAA   YY  YY  EEEEE  RRRRR      11 " << endl;
+    ss << '\t' << "PP  PP  LL      AA  AA   YYYY   EE     RR  RR   1111" << endl;
+    ss << '\t' << "PPPPP   LL      AAAAAA    YY    EEEEE  RRRRR      11" << endl;
+    ss << '\t' << "PP      LL      AA  AA    YY    EE     RR RR      11" << endl;
+    ss << '\t' << "PP      LLLLLL  AA  AA    YY    EEEEE  RR  RR    1111" << endl << endl;
+    
+    ss << '\t' << "WW    WW  IIII  NN  NN   SSSS   !!" << endl;
+    ss << '\t' << "WW    WW   II   NNN NN  SSS     !! " << endl;
+    ss << '\t' << "WW WW WW   II   NNNNNN    SSS   !!" << endl;
+    ss << '\t' << "WWWWWWWW   II   NN NNN  S  SSS  " << endl;
+    ss << '\t' << "WW WW WW  IIII  NN  NN   SSSS   !! " << endl << endl;
+    
+    //waste_time();d
+    ss << '\t' << "PRESS Q TO QUIT " << endl << endl;
+    ss << '\t' << "PRESS R TO RESTART " << endl;
+    
+    move(1,1);
+    addstr(ss.str().c_str());
+    refresh();
+}
+
+void PlayerTwoWins()
+{
+    erase();
+    stringstream ss;
+    
+    
+    //will center TANKS vertically
+    int numOfEndls = (LINES - 22) / 2;
+    //askii art title screen
+    
+    for (int i = 0; i < numOfEndls; i++)
+    {
+        ss << endl;
+    }
+    ss << '\t' << "PPPPP   LL       AAAA   YY  YY  EEEEE  RRRRR    22222" << endl;
+    ss << '\t' << "PP  PP  LL      AA  AA   YYYY   EE     RR  RR  22   22" << endl;
+    ss << '\t' << "PPPPP   LL      AAAAAA    YY    EEEEE  RRRRR       22" << endl;
+    ss << '\t' << "PP      LL      AA  AA    YY    EE     RR RR     22" << endl;
+    ss << '\t' << "PP      LLLLLL  AA  AA    YY    EEEEE  RR  RR  2222222" << endl << endl;
+    
+    ss << '\t' << "WW    WW  IIII  NN  NN   SSSS   !!" << endl;
+    ss << '\t' << "WW    WW   II   NNN NN  SSS     !! " << endl;
+    ss << '\t' << "WW WW WW   II   NNNNNN    SSS   !!" << endl;
+    ss << '\t' << "WWWWWWWW   II   NN NNN  S  SSS  " << endl;
+    ss << '\t' << "WW WW WW  IIII  NN  NN   SSSS   !! " << endl << endl;
+    
+    ss << '\t' << "PRESS Q TO QUIT " << endl << endl;
+    ss << '\t' << "PRESS R TO RESTART " << endl;
+    //waste_time();d
+    
+    move(1,1);
+    addstr(ss.str().c_str());
+    refresh();
 }
 
 //print window:
