@@ -47,15 +47,6 @@ void TitleScreen()
     stringstream ss;
     
     
-    
-    //will center TANKS vertically
-    //int numOfEndls = (LINES - 22) / 2;
-    //askii art title screen
-    
-    /*for (int i = 0; i < numOfEndls; i++)
-     {
-     ss << endl;
-     }*/
     ss  << " TTTTTTTTTTTTTTT   AAAAAAAAAAA   NNNNNNN    NNNNN  KKKKK   KKKKK  SSSSSSSSSS" << endl;
     ss  << " TTTTTTTTTTTTTTT  AAAAAAAAAAAAA  NNNNNNNN   NNNNN  KKKKK  KKKKK  SSSSSSSSSSSS" << endl;
     ss  << " TTTTTTTTTTTTTTT  AAAAA   AAAAA  NNNNNNNNN  NNNNN  KKKKK KKKKK   SSSSS  SSSSS" << endl;
@@ -67,7 +58,6 @@ void TitleScreen()
     ss  << " ------------------------------------------------------------------------------" << endl;
     ss << endl << endl << endl;
     
-    //waste_time();d
     move(5,0);
     addstr(ss.str().c_str());
     refresh();
@@ -79,31 +69,28 @@ void InstructionScreen()
     erase();
     stringstream ss;
     
-    // Fix output TODO
-    ss << '\t' << "        BE THE FIRST TO REACH 3 POINTS!" << endl << endl;
+    ss << '\t' << "        BE THE FIRST TO REACH 3 POINTS!  " << endl << endl;
     ss << '\t' << "-----------------------------------------" << endl;
-    ss << '\t' << "*               CONTROLS:               *" << endl;
+    ss << '\t' << "|               CONTROLS:               |" << endl;
     ss << '\t' << "-----------------------------------------" << endl;
-    ss << '\t' << "*                                       *" << endl;
-    ss << '\t' << "*                  USE                  *" << endl;
-    ss << '\t' << "*                                       *" << endl;
-    ss << '\t' << "*                   W   E               *" << endl;
-    ss << '\t' << "*	           A   S   D     ENTER     *" << endl;
-    ss << '\t' << "*                       C		       *" << endl;
-    ss << '\t' << "*                                       *" << endl;
-    ss << '\t' << "*      W       INCREASE POWER LEVEL     *" << endl;
-    ss << '\t' << "*      S       DECREASE POWER LEVEL     *" << endl;
-    ss << '\t' << "*      A	      MOVE LEFT		           *" << endl;
-    ss << '\t' << "*      D	      MOVE RIGHT		       *" << endl;
-    ss << '\t' << "*      E	      INCREASE ANGL  	       *" << endl;
-    ss << '\t' << "*      C       DECREASE ANGLE           *" << endl;
-    ss << '\t' << "*      ENTER	  SHOOT			           *" << endl;
-    ss << '\t' << "*                                       *" << endl;
+    ss << '\t' << "|                                       |" << endl;
+    ss << '\t' << "|  Player 1:                 Player 2:  |" << endl;
+    ss << '\t' << "|                                       |" << endl;
+    ss << '\t' << "|  q         INCREASE ANGLE          ]  |" << endl;
+    ss << '\t' << "|  a         DECREASE ANGLE          '  |" << endl;
+    ss << '\t' << "|  w         INCREASE POWER          [  |" << endl;
+    ss << '\t' << "|  s         DECREASE ANGLE          ;  |" << endl;
+    ss << '\t' << "|  z         MOVE LEFT               .  |" << endl;
+    ss << '\t' << "|  x         MOVE RIGHT              /  |" << endl;
+    ss << '\t' << "|  [space]   SHOOT             [enter]  |" << endl;
+    ss << '\t' << "|                                       |" << endl;
+    ss << '\t' << "|                                       |" << endl;
+    ss << '\t' << "|                                       |" << endl;
+    ss << '\t' << "|                                       |" << endl;
+    ss << '\t' << "|                                       |" << endl;
     ss << '\t' << "-----------------------------------------" << endl;
     ss << endl << endl;
-    ss << "                            PRESS ANY KEY TO START" << endl;
-    
-    //waste_time();d
+    ss << '\t' << "           PRESS ANY KEY TO START        " << endl;
     
     addstr(ss.str().c_str());
     refresh();
@@ -136,7 +123,6 @@ void PlayerOneWins()
     ss << '\t' << "WWWWWWWW   II   NN NNN  S  SSS  " << endl;
     ss << '\t' << "WW WW WW  IIII  NN  NN   SSSS   !! " << endl << endl;
     
-    //waste_time();d
     ss << '\t' << "PRESS Q TO QUIT " << endl << endl;
     ss << '\t' << "PRESS R TO RESTART " << endl;
     
@@ -173,7 +159,6 @@ void PlayerTwoWins()
     
     ss << '\t' << "PRESS Q TO QUIT " << endl << endl;
     ss << '\t' << "PRESS R TO RESTART " << endl;
-    //waste_time();d
     
     move(1,1);
     addstr(ss.str().c_str());
@@ -250,16 +235,20 @@ void ProcessKeyboard(Ground &g, Player *players, bool &keep_going)
             break;
             
         case 'z':
-            //make sure the tank stays within left bounds:
+            //if the player isn't already moving and the tank is still within bounds:
             if (!players[0].is_moving && players[0].col < COLS - 3)
             {
+                //this will be switched to false after the motion timer has expired
                 players[0].is_moving = true;
+                //start motion timer:
                 players[0].move_t0 = clock();
+                //move the tank:
                 players[0].col--;
             }
         break;
             
         case 'x':
+            //if the player isn't already moving and the tank is still within bounds:
             if (!players[0].is_moving && players[0].col > 0)
             {
                 players[0].is_moving = true;

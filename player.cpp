@@ -123,7 +123,8 @@ void Player::DrawShots(int player, Ground & g, Player & other)
 {
     float time_elapsed;
     time_elapsed = float( clock() - shot_t0 ) /  CLOCKS_PER_SEC;
-
+    float shot_speed = 0.01;
+    float hit_duration = 0.7;
 
     if (is_shooting)
     {
@@ -140,7 +141,7 @@ void Player::DrawShots(int player, Ground & g, Player & other)
         if (shots_length > 0)
         {
             //delete the first element in the vector:
-            if (time_elapsed > 0.01)
+            if (time_elapsed > shot_speed)
             {
                 shots_length--;
                 shot_t0 = clock();
@@ -151,7 +152,7 @@ void Player::DrawShots(int player, Ground & g, Player & other)
         {
             shots.clear();
             //print hits:
-            if (time_elapsed < 0.7)
+            if (time_elapsed < hit_duration)
             {
                 for (size_t s = 0; s< hits.size();s++)
                 {
@@ -225,12 +226,11 @@ void Player::Hit(Vec2D &v, Player & other, Ground &g)
         int hit_line = hts.at(i).y;
         int hit_col = hts.at(i).x;
         
-        //if a hit spot is within acceptable range (this is to avoid an out-of-range error)
-        //TODO: prevent player 0 from landing hits outside the vector:
-        if (hit_col > 0 && hit_col < COLS - 5)
+        //if a hit spot is within ground vector range:
+        if (hit_col > 0 && hit_col < COLS - 2)
         {
             //and if the hit spot = a ground cell or the cell right above it:
-            if ((hit_line == g.ground.at(hit_col)) || (hit_line + 1 == g.ground.at(hit_col)))
+            if ((hit_line == g.ground.at(hit_col)) || (hit_line == g.ground.at(hit_col + 1)))
             {
                 //push a Vec2D with these coordinates into player.hits:
                 Vec2D v(hit_line, hit_col);
@@ -238,7 +238,6 @@ void Player::Hit(Vec2D &v, Player & other, Ground &g)
             }
         }
     }
-    
     refresh();
 }
 
@@ -278,6 +277,21 @@ void Player::Shoot(Ground & g, Player & other)
         if (pN.x < 1 || pN.x >= COLS - 2)
             break;
         
+        /*
+        //debugger:
+        stringstream ss;
+        ss << "pN.y: " << pN.y << " pN.x: "<< pN.x << "LINES: " << LINES << "COLS: " << COLS;
+        int printline = i;
+        if (printline > LINES - 6)
+            printline = LINES - 6;
+        move (5 + printline, 3);
+        addstr(ss.str().c_str());
+        //for debugging:
+        nodelay(stdscr, 0);
+        getch();
+        nodelay(stdscr, 1);
+        */
+        
         //if the shot trajectory hits a ground cell:
         if (pN.y >= g.ground.at((int)pN.x))
         {
@@ -289,8 +303,6 @@ void Player::Shoot(Ground & g, Player & other)
         //push the coordinates of each trajectory cell into player.shots so they can be printed later:
         Vec2D v((int)pN.x + 1, (int)pN.y - 1);
         shots.push_back(v);
-        
-        
     }
     //turn on is_shooting so the trajectory can start to be printed:
     is_shooting = true;
@@ -303,9 +315,10 @@ void Player::Shoot(Ground & g, Player & other)
 void Player::Move()
 {
     float time_elapsed;
+    float move_interval = 0.1;
     time_elapsed = float( clock() - move_t0 ) /  CLOCKS_PER_SEC;    
     
-    if (time_elapsed > 0.5)
+    if (time_elapsed > move_interval)
     {
         is_moving = false;
     }
