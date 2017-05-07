@@ -33,6 +33,7 @@ Player::Player()
 	hit = false;
     score = 0;
     is_shooting = false;
+    is_moving = false;
     
 	// bool hit <- will be at end of shoot function.
 	// checks after each function whether it hit player
@@ -121,8 +122,6 @@ void Player::DrawSettings(int num)
 void Player::DrawShots(int player, Ground & g, Player & other)
 {
     float time_elapsed;
-    clock_t now;
-    now = clock();
     time_elapsed = float( clock() - shot_t0 ) /  CLOCKS_PER_SEC;
 
 
@@ -141,7 +140,7 @@ void Player::DrawShots(int player, Ground & g, Player & other)
         if (shots_length > 0)
         {
             //delete the first element in the vector:
-            if (time_elapsed > 0.02)
+            if (time_elapsed > 0.01)
             {
                 shots_length--;
                 shot_t0 = clock();
@@ -299,4 +298,15 @@ void Player::Shoot(Ground & g, Player & other)
     shot_t0 = clock();
     //this value is needed to incrementally print the trajectory, animation style, in DrawShots():
     shots_length = shots.size();
+}
+
+void Player::Move()
+{
+    float time_elapsed;
+    time_elapsed = float( clock() - move_t0 ) /  CLOCKS_PER_SEC;    
+    
+    if (time_elapsed > 0.5)
+    {
+        is_moving = false;
+    }
 }

@@ -195,6 +195,8 @@ void DrawScreen(Ground & g, Player * players)
     players[1].DrawShots(1, g, players[0]);
     players[0].DrawSettings(0);
     players[1].DrawSettings(1);
+    players[0].Move();
+    players[1].Move();
     refresh();
 }
 
@@ -249,14 +251,21 @@ void ProcessKeyboard(Ground &g, Player *players, bool &keep_going)
             
         case 'z':
             //make sure the tank stays within left bounds:
-            if (players[0].col > 0)
+            if (!players[0].is_moving && players[0].col < COLS - 3)
+            {
+                players[0].is_moving = true;
+                players[0].move_t0 = clock();
                 players[0].col--;
+            }
         break;
             
         case 'x':
-            //make sure the tank stays within right bounds:
-            if (players[0].col < COLS - 3)
+            if (!players[0].is_moving && players[0].col > 0)
+            {
+                players[0].is_moving = true;
+                players[0].move_t0 = clock();
                 players[0].col++;
+            }
             break;
             
         //space key:
@@ -286,13 +295,21 @@ void ProcessKeyboard(Ground &g, Player *players, bool &keep_going)
             break;
             
         case '.':
-            if (players[1].col > 0)
+            if (!players[1].is_moving && players[1].col < COLS - 3)
+            {
+                players[1].is_moving = true;
+                players[1].move_t0 = clock();
                 players[1].col--;
+            }
             break;
             
         case '/':
-            if (players[1].col < COLS - 3)
+            if (!players[1].is_moving && players[1].col > 0)
+            {
+                players[1].is_moving = true;
+                players[1].move_t0 = clock();
                 players[1].col++;
+            }
             break;
         
         //enter key:
@@ -318,14 +335,17 @@ void ApplyChanges(Ground &g, Player *players, bool &keep_going)
 {
     if (players[0].hit || players[1].hit)
     {
+        //update score:
         for (int i=0;i<2;i++)
         {
-            //update score:
             if(players[i].hit)
             {
                 players[1 - i].score++;
+                break;
             }
         }
+        
+        //if neither player has scored 3 hits yet:
         if (players[0].score < 3 && players[1].score < 3)
         {
             //erase current ground and players data and re-initialize game:
@@ -342,11 +362,12 @@ void ApplyChanges(Ground &g, Player *players, bool &keep_going)
             {
                 PlayerTwoWins();
             }
-            
+            //enable waiting for keyboard input after getch():
             nodelay(stdscr, 0);
             
             int c = getch();
             
+            //to restart:
             if (c == 'r')
             {
                 players[0].score = 0;
@@ -354,11 +375,13 @@ void ApplyChanges(Ground &g, Player *players, bool &keep_going)
                 //erase current ground and players data and re-initialize game:
                 g.ground.clear();
                 InitializeGame(g, players);
-                
+                //disable waiting for keyboard input after getch() let the game loop continue spinning after each iteration:
                 nodelay(stdscr, 1);
             }
+            //to quit:
             else
             {
+                //break out of the game loop:
                 keep_going = false;
             }
         }

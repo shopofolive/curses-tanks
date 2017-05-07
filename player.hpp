@@ -28,8 +28,9 @@ public:
 	void AngleUp();
 	void AngleDown();
     void DrawShots(int player, Ground & g, Player & other);
-    void Shoot(Ground & ground, Player & other);
+    void Shoot(Ground & g, Player & other);
     void Hit(Vec2D &v, Player & other, Ground &g);
+    void Move();
 
 	int col;
 	double power;
@@ -38,10 +39,13 @@ public:
     int score;
 	Side s;
     bool is_shooting;
+    bool is_moving;
+    int direction;
     std::vector<Vec2D> shots;
     clock_t shot_t0;
     size_t shots_length;
     std::vector<Vec2D> hits;
+    clock_t move_t0;
 
 	static const int power_increment;
 	static const double angle_increment;
