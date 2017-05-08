@@ -13,6 +13,10 @@
 #include "Vec2D.hpp"
 #endif
 
+
+//#include <SDL2/SDL.h>
+//#include <SDL2_Mixer/SDL_Mixer.h>
+
 using namespace std;
 
 //defined in ground.cpp:
@@ -163,12 +167,11 @@ void Player::DrawShots(int player, Ground & g, Player & other)
             }
             else
             {
+                int hit_line = hits.at(s).x;
+                int hit_col = hits.at(s).y;
                 //form a crater:
                 for (size_t s = 0; s< hits.size();s++)
                 {
-                    int hit_line = hits.at(s).x;
-                    int hit_col = hits.at(s).y;
-                    
                     if (hit_line == g.ground.at(hit_col - 1))
                         g.ground.at(hit_col - 1) = g.ground.at(hit_col - 1) + 1;
                     
@@ -182,7 +185,14 @@ void Player::DrawShots(int player, Ground & g, Player & other)
                     {
                         //enemy tank is hit!!!
                         other.hit = true;
-                        flash();
+                        /*
+                        Mix_Music *hit_sound;
+                        hit_sound = Mix_LoadMUS("/Users/dshapovalov/VirtualBox VMs/Shared Folder/curses-tanks/curses-tanks-m/curses-tanks-m/hit.mp3");
+                        //finding out the current directory:
+                        if (hit_sound) {
+                            Mix_PlayMusic(hit_sound, 1);
+                        }
+                         */
                     }
                     
                     //check if self hit
@@ -190,11 +200,19 @@ void Player::DrawShots(int player, Ground & g, Player & other)
                     {
                         //my tank is hit!!!
                         hit = true;
-                        flash();
+                        /*
+                        Mix_Music *hit_sound;
+                        hit_sound = Mix_LoadMUS("/Users/dshapovalov/VirtualBox VMs/Shared Folder/curses-tanks/curses-tanks-m/curses-tanks-m/hit.mp3");
+                        //finding out the current directory:
+                        if (hit_sound) {
+                            Mix_PlayMusic(hit_sound, 1);
+                        }
+                         */
                     }
                 }
                 hits.clear();
-                is_shooting = false;            }
+                is_shooting = false;
+            }
         }
     }
 }

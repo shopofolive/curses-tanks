@@ -23,11 +23,21 @@
 #include "player.hpp"
 //#include <SDL2/SDL.h>
 //#include <SDL2_Mixer/SDL_Mixer.h>
+#include <unistd.h>
 
 using namespace std;
 
 //defined in ground.cpp:
 extern int base_height_divisor;
+
+void PrintMessage(string s)
+{
+    stringstream ss;
+    ss << s;
+    move(1,1);
+    addstr(ss.str().c_str());
+    refresh();
+}
 
 //delay game for int milliseconds:
 void MySleep(int milliseconds)
@@ -61,7 +71,7 @@ void TitleScreen()
     move(5,0);
     addstr(ss.str().c_str());
     refresh();
-    MySleep(1000);
+    MySleep(2000);
 }
 
 void InstructionScreen()
@@ -262,7 +272,22 @@ void ProcessKeyboard(Ground &g, Player *players, bool &keep_going)
             //invoke Shoot() only if the previous shot (if any) has been fully printed and processed:
             //this ensures that only 1 shot per each player is fired at a time:
             if (!players[0].is_shooting)
+            {
+                /*
+                Mix_Music *shot0;
+                shot0 = Mix_LoadMUS("/Users/dshapovalov/VirtualBox VMs/Shared Folder/curses-tanks/curses-tanks-m/curses-tanks-m/shot.mp3");
+                //finding out the current directory:
+                if (shot0) {
+                    Mix_PlayMusic(shot0, 1);
+                }
+                else
+                {
+                    //for debugging:
+                    PrintMessage(SDL_GetError());
+                }
+                 */
                 players[0].Shoot(g, players[1]);
+            }
             break;
             
         
@@ -310,7 +335,22 @@ void ProcessKeyboard(Ground &g, Player *players, bool &keep_going)
             //invoke Shoot() only if the previous shot (if any) has been fully printed and processed:
             //this ensures that only 1 shot per each player is fired at a time:
             if (!players[1].is_shooting)
+            {
+                /*
+                Mix_Music *shot1;
+                shot1 = Mix_LoadMUS("/Users/dshapovalov/VirtualBox VMs/Shared Folder/curses-tanks/curses-tanks-m/curses-tanks-m/shot.mp3");
+                //finding out the current directory:
+                if (shot1) {
+                    Mix_PlayMusic(shot1, 1);
+                }
+                else
+                {
+                    //for debugging:
+                    PrintMessage(SDL_GetError());
+                }
+                 */
                 players[1].Shoot(g, players[0]);
+            }
             break;
             
         //if not keyboard input is entered, proceed to the next iteration of the game loop
@@ -337,6 +377,7 @@ void ApplyChanges(Ground &g, Player *players, bool &keep_going)
         //if neither player has scored 3 hits yet:
         if (players[0].score < 3 && players[1].score < 3)
         {
+            flash();
             //erase current ground and players data and re-initialize game:
             g.ground.clear();
             InitializeGame(g, players);
@@ -380,29 +421,7 @@ void ApplyChanges(Ground &g, Player *players, bool &keep_going)
 
 int main(int argc, char * argv[])
 {
-    /*
-    //SDL_Mixer stuff:
-    Mix_Music *music;
     
-    // Initialize music.
-    if (SDL_Init(SDL_INIT_AUDIO) < 0) {
-        fprintf(stderr, "unable to initialize SDL\n");
-        exit(EXIT_FAILURE);
-    }
-    if (Mix_Init(MIX_INIT_MP3) != MIX_INIT_MP3) {
-        fprintf(stderr, "unable to initialize SDL_mixer\n");
-        exit(EXIT_FAILURE);
-    }
-    if (Mix_OpenAudio(MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT, 2, 1024) != 0) {
-        fprintf(stderr, "unable to initialize audio\n");
-        exit(EXIT_FAILURE);
-    }
-    Mix_AllocateChannels(1); // only need background music
-    music = Mix_LoadMUS("goat.mp3");
-    if (music) {
-        Mix_PlayMusic(music, -1);
-    }
-    */
     
     //seed rand()
     srand(static_cast<unsigned int>(time(nullptr)));
@@ -424,9 +443,55 @@ int main(int argc, char * argv[])
     //make cursor invisible:
     curs_set(0);
     
+    /*
+    //SDL_Mixer stuff:
+    Mix_Music *bkg;
+    
+    
+    // Initialize music.
+    if (SDL_Init(SDL_INIT_AUDIO) < 0) {
+        PrintMessage("unable to initialize SDL\n");
+        exit(EXIT_FAILURE);
+    }
+    if (Mix_Init(MIX_INIT_MP3) != MIX_INIT_MP3) {
+        PrintMessage("unable to initialize SDL_mixer\n");
+        exit(EXIT_FAILURE);
+    }
+    if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) != 0) {
+        PrintMessage("unable to initialize audio\n");
+        exit(EXIT_FAILURE);
+    }
+    */
     TitleScreen();
     
     InstructionScreen();
+    /*
+    //play background music:
+    Mix_AllocateChannels(4);
+    bkg = Mix_LoadMUS("/Users/dshapovalov/VirtualBox VMs/Shared Folder/curses-tanks/curses-tanks-m/curses-tanks-m/bkg.mp3");
+    //finding out the current directory:
+    if (bkg) {
+        Mix_PlayMusic(bkg, -1);
+    }
+    else
+    {
+        //for debugging:
+        //PrintMessage(SDL_GetError());
+        
+         getch();
+         char* cwd;
+         char buff[PATH_MAX + 1];
+         
+         cwd = getcwd( buff, PATH_MAX + 1);
+         if( cwd != NULL ) {
+         stringstream mss;
+         move(2,1);
+         mss << "My working directory is: " << cwd;
+         PrintMessage(mss.str());
+         }
+     
+    }
+     */
     getch();
     
     //disable waiting for keyboard input to be entered when getch() is invoked:
@@ -455,7 +520,7 @@ int main(int argc, char * argv[])
     /*
     // Deinitialize Sound
     Mix_HaltMusic();
-    Mix_FreeMusic(music);
+    Mix_FreeMusic(bkg);
     Mix_CloseAudio();
     Mix_Quit();
     */

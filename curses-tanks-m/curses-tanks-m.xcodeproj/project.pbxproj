@@ -31,6 +31,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		6A0607561EC0D909006D5AD2 /* bkg.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = bkg.mp3; sourceTree = "<group>"; };
+		6A0607571EC0D909006D5AD2 /* shot.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = shot.mp3; sourceTree = "<group>"; };
+		6A0607581EC0E5B8006D5AD2 /* hit.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = hit.mp3; sourceTree = "<group>"; };
 		6A252CC01EB8A3AC00ED0844 /* Vec2D.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Vec2D.cpp; sourceTree = "<group>"; };
 		6A252CC11EB8A3AC00ED0844 /* Vec2D.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Vec2D.hpp; sourceTree = "<group>"; };
 		6A252CCC1EBD416C00ED0844 /* SDL2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2.framework; path = ../../../../../../Library/Frameworks/SDL2.framework; sourceTree = "<group>"; };
@@ -78,6 +81,9 @@
 		C0472D3C1EB2AE3A0045A747 /* curses-tanks-m */ = {
 			isa = PBXGroup;
 			children = (
+				6A0607581EC0E5B8006D5AD2 /* hit.mp3 */,
+				6A0607561EC0D909006D5AD2 /* bkg.mp3 */,
+				6A0607571EC0D909006D5AD2 /* shot.mp3 */,
 				C0472D451EB2AEB00045A747 /* ground.cpp */,
 				C0472D461EB2AEB00045A747 /* ground.hpp */,
 				C0472D471EB2AEB00045A747 /* main.cpp */,
