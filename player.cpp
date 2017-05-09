@@ -171,7 +171,7 @@ void Player::DrawShots(int player, Ground & g, Player & other)
             
             else
             {
-                //form a crater:
+                //craters:
                 for (size_t s = 0; s< hits.size();s++)
                 {
                     int hit_line = hits.at(s).x;
@@ -191,7 +191,8 @@ void Player::DrawShots(int player, Ground & g, Player & other)
                     //make sure the hit coordinates are within bounds:
                     if ((hits.at(s).x > 0) && (hits.at(s).x < LINES) && (hits.at(s).y > 0) && (hits.at(s).y < COLS - 5))
                     {
-                        if (hit_line == g.ground.at(hit_col - 1))
+                        //drop the ground to form a crater:
+                        if (hit_line == g.ground.at(hit_col - 1) || hit_line - 1 == g.ground.at(hit_col - 1))
                             g.ground.at(hit_col - 1) = g.ground.at(hit_col - 1) + 1;
                         
                         //adjust to make sure the ground does not encroach on the border:
@@ -265,6 +266,9 @@ void Player::Hit(Vec2D &v, Player & other, Ground &g)
         //if a hit spot is within ground vector range:
         if (hit_col > 0 && hit_col < COLS - 2)
         {
+            Vec2D v(hit_line, hit_col);
+            hits.push_back(v);
+            /*
             //and if the hit spot = a ground cell or the cell right above it:
             if ((hit_line == g.ground.at(hit_col)) || (hit_line == g.ground.at(hit_col + 1)))
             {
@@ -272,6 +276,7 @@ void Player::Hit(Vec2D &v, Player & other, Ground &g)
                 Vec2D v(hit_line, hit_col);
                 hits.push_back(v);
             }
+             */
         }
     }
     refresh();
