@@ -135,12 +135,13 @@ void Player::DrawShots(int player, Ground & g, Player & other)
         //print trajectory:
         for (size_t s = 0; s< shots.size() - shots_length;s++)
         {
-            if (shots.at(s).y > 0)
+            if ((shots.at(s).y > 0) && (shots.at(s).y < LINES) && (shots.at(s).x > 0) && (shots.at(s).x < COLS))
             {
                 move(shots.at(s).y, shots.at(s).x);
                 addch('*');
             }
         }
+        
         
         if (shots_length > 0)
         {
@@ -160,38 +161,55 @@ void Player::DrawShots(int player, Ground & g, Player & other)
             {
                 for (size_t s = 0; s< hits.size();s++)
                 {
-                    move(hits.at(s).x, hits.at(s).y);
-                    addch('X');
-                    
+                    if ((hits.at(s).x > 0) && (hits.at(s).x < LINES) && (hits.at(s).y > 0) && (hits.at(s).y < COLS))
+                    {
+                        move(hits.at(s).x, hits.at(s).y);
+                        addch('X');
+                    }
                 }
             }
+            
             else
             {
-                int hit_line = hits.at(s).x;
-                int hit_col = hits.at(s).y;
                 //form a crater:
                 for (size_t s = 0; s< hits.size();s++)
                 {
-                    if (hit_line == g.ground.at(hit_col - 1))
-                        g.ground.at(hit_col - 1) = g.ground.at(hit_col - 1) + 1;
+                    int hit_line = hits.at(s).x;
+                    int hit_col = hits.at(s).y;
                     
-                    //adjust to make sure the ground does not encroach on the border:
-                    if (g.ground.at(hit_col - 1) > LINES - 2)
-                        g.ground.at(hit_col - 1) = LINES - 2;
+                    /*
+                     //debugging:
+                    stringstream ss;
+                    ss << "hit_line: " << hit_line << " hit_col: " << hit_col;
+                    move(5+int(s), 5);
+                    addstr(ss.str().c_str());
+                    nodelay(stdscr, 0);
+                    getch();
+                    nodelay(stdscr, 1);
+                     */
                     
-                    
+                    //make sure the hit coordinates are within bounds:
+                    if ((hits.at(s).x > 0) && (hits.at(s).x < LINES) && (hits.at(s).y > 0) && (hits.at(s).y < COLS - 5))
+                    {
+                        if (hit_line == g.ground.at(hit_col - 1))
+                            g.ground.at(hit_col - 1) = g.ground.at(hit_col - 1) + 1;
+                        
+                        //adjust to make sure the ground does not encroach on the border:
+                        if (g.ground.at(hit_col - 1) > LINES - 2)
+                            g.ground.at(hit_col - 1) = LINES - 2;
+                    }
                     //check if enemy tank is hit:
                     if ((hit_line == g.ground.at(other.col) - 1) && (hit_col == other.col + 1))
                     {
                         //enemy tank is hit!!!
                         other.hit = true;
                         /*
-                        Mix_Music *hit_sound;
-                        hit_sound = Mix_LoadMUS("/Users/dshapovalov/VirtualBox VMs/Shared Folder/curses-tanks/curses-tanks-m/curses-tanks-m/hit.mp3");
-                        //finding out the current directory:
-                        if (hit_sound) {
-                            Mix_PlayMusic(hit_sound, 1);
-                        }
+                         Mix_Music *hit_sound;
+                         hit_sound = Mix_LoadMUS("/Users/dshapovalov/VirtualBox VMs/Shared Folder/curses-tanks/curses-tanks-m/curses-tanks-m/hit.mp3");
+                         //finding out the current directory:
+                         if (hit_sound) {
+                         Mix_PlayMusic(hit_sound, 1);
+                         }
                          */
                     }
                     
@@ -201,12 +219,12 @@ void Player::DrawShots(int player, Ground & g, Player & other)
                         //my tank is hit!!!
                         hit = true;
                         /*
-                        Mix_Music *hit_sound;
-                        hit_sound = Mix_LoadMUS("/Users/dshapovalov/VirtualBox VMs/Shared Folder/curses-tanks/curses-tanks-m/curses-tanks-m/hit.mp3");
-                        //finding out the current directory:
-                        if (hit_sound) {
-                            Mix_PlayMusic(hit_sound, 1);
-                        }
+                         Mix_Music *hit_sound;
+                         hit_sound = Mix_LoadMUS("/Users/dshapovalov/VirtualBox VMs/Shared Folder/curses-tanks/curses-tanks-m/curses-tanks-m/hit.mp3");
+                         //finding out the current directory:
+                         if (hit_sound) {
+                         Mix_PlayMusic(hit_sound, 1);
+                         }
                          */
                     }
                 }
@@ -292,23 +310,18 @@ void Player::Shoot(Ground & g, Player & other)
         pN.y = LINES - pN.y;
         
         //if the shot trajectory crosses the left or right border:
-        if (pN.x < 1 || pN.x >= COLS - 2)
+        if (pN.x < 1 || pN.x >= COLS - 5)
             break;
         
-        /*
-        //debugger:
-        stringstream ss;
-        ss << "pN.y: " << pN.y << " pN.x: "<< pN.x << "LINES: " << LINES << "COLS: " << COLS;
-        int printline = i;
-        if (printline > LINES - 6)
-            printline = LINES - 6;
-        move (5 + printline, 3);
-        addstr(ss.str().c_str());
-        //for debugging:
-        nodelay(stdscr, 0);
-        getch();
-        nodelay(stdscr, 1);
-        */
+        if (pN.y < 1) {
+            continue;
+        }
+        
+        if (pN.y >= LINES)
+        {
+            break;
+        }
+        
         
         //if the shot trajectory hits a ground cell:
         if (pN.y >= g.ground.at((int)pN.x))
@@ -322,6 +335,7 @@ void Player::Shoot(Ground & g, Player & other)
         Vec2D v((int)pN.x + 1, (int)pN.y - 1);
         shots.push_back(v);
     }
+   
     //turn on is_shooting so the trajectory can start to be printed:
     is_shooting = true;
     //define the initial time of the shooting:

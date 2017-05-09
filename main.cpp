@@ -23,7 +23,7 @@
 #include "player.hpp"
 //#include <SDL2/SDL.h>
 //#include <SDL2_Mixer/SDL_Mixer.h>
-#include <unistd.h>
+//#include <unistd.h>
 
 using namespace std;
 
@@ -184,14 +184,13 @@ void DrawScreen(Ground & g, Player * players)
 	//draw a border around the window:
     box(stdscr, 0, 0);
 	g.Draw();
-	players[0].Draw(g);
-	players[1].Draw(g);
-    players[0].DrawShots(0, g, players[1]);
-    players[1].DrawShots(1, g, players[0]);
-    players[0].DrawSettings(0);
-    players[1].DrawSettings(1);
-    players[0].Move();
-    players[1].Move();
+    for (int i=0;i<2;i++)
+    {
+        players[i].Draw(g);
+        players[i].DrawShots(0, g, players[1 - i]);
+        players[i].DrawSettings(i);
+        players[i].Move();
+    }
     refresh();
 }
 
@@ -246,7 +245,7 @@ void ProcessKeyboard(Ground &g, Player *players, bool &keep_going)
             
         case 'z':
             //if the player isn't already moving and the tank is still within bounds:
-            if (!players[0].is_moving && players[0].col < COLS - 3)
+            if (!players[0].is_moving && players[0].col > 0)
             {
                 //this will be switched to false after the motion timer has expired
                 players[0].is_moving = true;
@@ -259,7 +258,7 @@ void ProcessKeyboard(Ground &g, Player *players, bool &keep_going)
             
         case 'x':
             //if the player isn't already moving and the tank is still within bounds:
-            if (!players[0].is_moving && players[0].col > 0)
+            if (!players[0].is_moving && players[0].col < COLS - 3)
             {
                 players[0].is_moving = true;
                 players[0].move_t0 = clock();
@@ -309,7 +308,7 @@ void ProcessKeyboard(Ground &g, Player *players, bool &keep_going)
             break;
             
         case '.':
-            if (!players[1].is_moving && players[1].col < COLS - 3)
+            if (!players[1].is_moving && players[1].col > 0)
             {
                 players[1].is_moving = true;
                 players[1].move_t0 = clock();
@@ -318,7 +317,7 @@ void ProcessKeyboard(Ground &g, Player *players, bool &keep_going)
             break;
             
         case '/':
-            if (!players[1].is_moving && players[1].col > 0)
+            if (!players[1].is_moving && players[1].col < COLS - 3)
             {
                 players[1].is_moving = true;
                 players[1].move_t0 = clock();
