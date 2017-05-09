@@ -306,7 +306,7 @@ void Player::Shoot(Ground & g, Player & other)
         pN.y = LINES - pN.y;
         
         //if the shot trajectory crosses the left or right border:
-        if (pN.x < 1 || pN.x >= COLS - 5)
+        if (pN.x < 1 || pN.x >= COLS - 2)
             break;
         
         if (pN.y < 1) {
