@@ -14,8 +14,8 @@
 #endif
 
 
-//#include <SDL2/SDL.h>
-//#include <SDL2_Mixer/SDL_Mixer.h>
+#include <SDL2/SDL.h>
+#include <SDL2_Mixer/SDL_Mixer.h>
 
 using namespace std;
 
@@ -203,14 +203,14 @@ void Player::DrawShots(int player, Ground & g, Player & other)
                     {
                         //enemy tank is hit!!!
                         other.hit = true;
-                        /*
+                        
                          Mix_Music *hit_sound;
                          hit_sound = Mix_LoadMUS("/Users/dshapovalov/VirtualBox VMs/Shared Folder/curses-tanks/curses-tanks-m/curses-tanks-m/hit.mp3");
                          //finding out the current directory:
                          if (hit_sound) {
                          Mix_PlayMusic(hit_sound, 1);
                          }
-                         */
+                        
                     }
                     
                     //check if self hit
@@ -218,14 +218,14 @@ void Player::DrawShots(int player, Ground & g, Player & other)
                     {
                         //my tank is hit!!!
                         hit = true;
-                        /*
+                        
                          Mix_Music *hit_sound;
                          hit_sound = Mix_LoadMUS("/Users/dshapovalov/VirtualBox VMs/Shared Folder/curses-tanks/curses-tanks-m/curses-tanks-m/hit.mp3");
                          //finding out the current directory:
                          if (hit_sound) {
                          Mix_PlayMusic(hit_sound, 1);
                          }
-                         */
+                         
                     }
                 }
                 hits.clear();
@@ -310,7 +310,7 @@ void Player::Shoot(Ground & g, Player & other)
         pN.y = LINES - pN.y;
         
         //if the shot trajectory crosses the left or right border:
-        if (pN.x < 1 || pN.x >= COLS - 5)
+        if (pN.x < 1 || pN.x >= COLS - 3)
             break;
         
         if (pN.y < 1) {
